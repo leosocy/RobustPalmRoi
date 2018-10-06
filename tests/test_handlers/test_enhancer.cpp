@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sat Oct 06 2018
+ * Created on Sun Oct 07 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,13 +22,17 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-
 #include "gtest/gtest.h"
+#include "handlers/enhancer.h"
 
-int main(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    ::testing::GTEST_FLAG(filter) = "*";
-    return RUN_ALL_TESTS();
+namespace {
+
+using rpr::Enhancer;
+
+TEST(EnhancerTest, test_enhancer) {
+  cv::Mat palm;
+  Enhancer enhancer;
+  enhancer.handle(palm, &palm);
 }
 
+}   // namespace

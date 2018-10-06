@@ -36,6 +36,8 @@ class Status {
   enum Code {
     kOk = 0,
   };
+  static Status Ok(const char* msg = NULL) { return Status(kOk, msg); }
+
   Status() : state_(NULL) {}
   Status(const Status& s) {
     state_ = (s.state_ == NULL ? NULL : CopyState(s.state_));
@@ -63,7 +65,7 @@ class Status {
   const char *state_;
 };
 
-inline Status::Status(Code code, const char* msg = NULL) {
+inline Status::Status(Code code, const char* msg) {
   size_t msg_len = (msg == NULL) ? 0 : strlen(msg);
   char *result = new char[msg_len + 2];
   result[0] = static_cast<char>(code);

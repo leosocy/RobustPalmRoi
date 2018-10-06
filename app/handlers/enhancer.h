@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sat Oct 06 2018
+ * Created on Sun Oct 07 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,13 +22,19 @@
  * SOFTWARE.
 \*****************************************************************************/
 
+#ifndef ROBUST_PALM_ROI_APP_HANDLERS_ENHANCER_H_
+#define ROBUST_PALM_ROI_APP_HANDLERS_ENHANCER_H_
 
-#include "gtest/gtest.h"
+#include "handlers/handler.h"
 
-int main(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    ::testing::GTEST_FLAG(filter) = "*";
-    return RUN_ALL_TESTS();
-}
+namespace rpr {
+
+class Enhancer : public Handler {
+ public:
+  virtual Status handle(const cv::Mat& orig, cv::Mat* res);
+};
+
+}   // namespace rpr
+
+#endif  // ROBUST_PALM_ROI_APP_HANDLERS_ENHANCER_H_
 
