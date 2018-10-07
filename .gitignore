@@ -2,8 +2,12 @@
 # Created by https://www.gitignore.io/api/c++,cmake,jetbrains,visualstudio,visualstudiocode
 
 ### special ###
-test_*
-cov*
+/test_*
+/cov*
+*.jpg
+
+### vscode ###
+.vscode
 
 ### C++ ###
 # Prerequisites
