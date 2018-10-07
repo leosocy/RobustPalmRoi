@@ -35,8 +35,10 @@ class Status {
  public:
   enum Code {
     kOk = 0,
+    kLoadImageError,
   };
   static Status Ok(const char* msg = NULL) { return Status(kOk, msg); }
+  static Status LoadImageError(const char* msg = NULL) { return Status(kLoadImageError, msg); }
 
   Status() : state_(NULL) {}
   Status(const Status& s) {
@@ -49,11 +51,6 @@ class Status {
     }
   }
   ~Status() { DeleteState(); }
-
- private:
-  Status(Code code, const char* msg = NULL);
-  const char* CopyState(const char* state);
-  void DeleteState();
   Code code() {
     assert (state_ != NULL);
     return static_cast<Code>(state_[0]);
@@ -62,6 +59,12 @@ class Status {
     assert (state_ != NULL);
     return state_ + 1;
   }
+  bool IsOk() { return code() == kOk; }
+
+ private:
+  Status(Code code, const char* msg = NULL);
+  const char* CopyState(const char* state);
+  void DeleteState();
   const char *state_;
 };
 

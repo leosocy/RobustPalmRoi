@@ -32,7 +32,7 @@ namespace rpr {
 
 class Handler {
  public:
-  virtual Status handle(const cv::Mat& orig, cv::Mat* res) = 0;
+  virtual Status Handle(const cv::Mat& orig, cv::Mat* res) = 0;
 };
 
 }   // namespace rpr

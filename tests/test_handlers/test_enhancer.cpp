@@ -22,17 +22,29 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#include "gtest/gtest.h"
+#include "test_base.h"
 #include "handlers/enhancer.h"
 
 namespace {
 
-using rpr::Enhancer;
+using cv::Mat;
 
-TEST(EnhancerTest, test_enhancer) {
-  cv::Mat palm;
-  Enhancer enhancer;
-  enhancer.handle(palm, &palm);
+using rpr::Status;
+using rpr::LaplaceEnhancer;
+
+class EnhancerTestFixture : public RobustPalmRoiTestFixtureBase {
+ public:
+  EnhancerTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+};
+
+TEST_F(EnhancerTestFixture, test_laplace_enhancer) {
+  Mat invalid_palm;
+  LaplaceEnhancer enhancer;
+  auto status = enhancer.Handle(invalid_palm, &invalid_palm);
+  EXPECT_EQ(status.code(), Status::kLoadImageError);
+
+  status = enhancer.Handle(perfect_palm_, &perfect_palm_);
+  EXPECT_EQ(status.code(), Status::kOk);
 }
 
 }   // namespace
