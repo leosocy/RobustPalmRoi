@@ -13,7 +13,7 @@ IF(${CMAKE_BUILD_TEST})
         SET(GCC_COVERAGE_COMPILE_FLAGS "-ggdb -coverage -fprofile-arcs -ftest-coverage")
         SET(GCC_COVERAGE_LINK_FLAGS    "-coverage")
 ENDIF()
-SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+SET(CMAKE_CXX_FLAGS  "--std=c++11 ${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 # Download and unpack googletest at configure time

@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sun Oct 07 2018
+ * Created on Mon Oct 08 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,15 +22,26 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#include "handlers/enhancer.h"
+#ifndef ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
+#define ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
+
+#include <memory>
+#include <queue>
+#include <opencv2/opencv.hpp>
+#include "handlers/handler.h"
+#include "common/status.h"
 
 
 namespace rpr {
 
-Status LaplaceEnhancer::Enhance(const cv::Mat& orig, cv::Mat* res) {
-  cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
-  cv::filter2D(orig, *res, orig.depth(), kernel);
-  return Status::Ok();
-}
+class HandlerChain {
+ public:
+  HandlerChain& Join(std::unique_ptr<Handler> handler);
+  Status Process(const cv::Mat& orig, cv::Mat* res);
+ private:
+  std::queue< std::unique_ptr<Handler> > handlers_;
+};
 
 }   // namespace rpr
+
+#endif  // ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_

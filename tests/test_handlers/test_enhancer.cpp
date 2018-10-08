@@ -25,6 +25,7 @@
 #include "test_base.h"
 #include "handlers/enhancer.h"
 
+
 namespace {
 
 using cv::Mat;
@@ -36,6 +37,7 @@ class EnhancerTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
   EnhancerTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
 };
+
 
 TEST_F(EnhancerTestFixture, test_laplace_enhancer) {
   Mat invalid_palm;
