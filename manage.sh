@@ -34,16 +34,15 @@ test() {
         docker pull ${OPENCV_CI_IMAGE} > /dev/null
     fi
     check_exec_success "$?" "pulling ${OPENCV_CI_IMAGE} image"
-    docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -c """
-	mkdir test_build; cd test_build;
-	cmake ../tests; make -j build_and_test;
-	lcov -b . -d . -c -o cov.info > /dev/null;
-	lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info -q;
-	lcov -l cov.info;
-	genhtml -o cov_result cov.info > /dev/null; rm -rf ../cov_result; mv -f cov_result ..
-	echo ""
-	echo ""
-	echo \"==========Generated code coverage report under ./cov_result directory.==========\"
+    docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -ec """
+        mkdir -p test_build; cd test_build; cmake ../tests; make -j build_and_test;
+        lcov -b . -d . -c -o cov.info > /dev/null;
+        lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info -q;
+        lcov -l cov.info;
+        genhtml -o cov_result cov.info > /dev/null; rm -rf ../cov_result; mv -f cov_result ..;
+        echo ""
+        echo ""
+        echo \"==========Generated code coverage report under ./cov_result directory.==========\"
     """
     check_exec_success "$?" "run test"
 }
@@ -57,10 +56,10 @@ gdbtest() {
     fi
     check_exec_success "$?" "pulling ${OPENCV_CI_IMAGE} image"
     docker run -it --rm -v ${CurDir}:/app -w /app \
-        --cap-add=SYS_PTRACE --security-opt seccomp=unconfined \
-        ${OPENCV_CI_IMAGE} /bin/sh -c """
+    --cap-add=SYS_PTRACE --security-opt seccomp=unconfined \
+    ${OPENCV_CI_IMAGE} /bin/sh -ec """
         mkdir test_build; cd test_build;
-	cmake ../tests && make -j && gdb ${APP_TEST_NAME}
+        cmake ../tests; make -j; gdb ${APP_TEST_NAME}
     """
     check_exec_success "$?" "gdb test"
 }
@@ -72,8 +71,8 @@ lint() {
         docker pull ${CPPCHECK_CI_IMAGE} > /dev/null
     fi
     check_exec_success "$?" "pulling ${CPPCHECK_CI_IMAGE} image"
-    docker run -it --rm -v ${CurDir}:/app -w /app ${CPPCHECK_CI_IMAGE} /bin/sh -c """
-	cppcheck --enable=warning,performance --error-exitcode=1 app
+    docker run -it --rm -v ${CurDir}:/app -w /app ${CPPCHECK_CI_IMAGE} /bin/sh -ec """
+	    cppcheck --enable=warning,performance --error-exitcode=1 app
     """
     check_exec_success "$?" "run lint"
 }
@@ -92,7 +91,11 @@ upload_codecov() {
         echo "Please set CODECOV_TOKEN value"
         exit 1
     fi
-    docker run -d --rm -v $(CurDir):/app -w /app/test_build -e CODECOV_TOKEN=${CODECOV_TOKEN} ${OPENCV_CI_IMAGE} /bin/bash -c "$(curl -s https://codecov.io/bash)"
+    docker run -d --rm -v ${CurDir}:/app -w /app/test_build \
+    -e CODECOV_TOKEN=${CODECOV_TOKEN} \
+    ${OPENCV_CI_IMAGE} /bin/bash -c """
+        $(curl -s https://codecov.io/bash);
+    """
     check_exec_success "$?" "upload codecov"
 }
 
@@ -105,7 +108,9 @@ save_images() {
     for image in "${CACHED_IMAGES[@]}"; do
         image_exist ${image}
         if [ $? -eq 0 ]; then
-            mkdir -p ${HOME}/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep ${image} | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > ${HOME}/docker/$1.tar.gz'
+            mkdir -p ${HOME}/docker && docker images -a \
+            --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep ${image} \
+            | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > ${HOME}/docker/$1.tar.gz'
         fi
     done
 }
@@ -140,4 +145,3 @@ case "$1" in
 esac
 
 exit 0
-

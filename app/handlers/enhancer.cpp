@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sat Oct 06 2018
+ * Created on Sun Oct 07 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,13 +22,14 @@
  * SOFTWARE.
 \*****************************************************************************/
 
+#include "handlers/enhancer.h"
 
-#include "gtest/gtest.h"
+namespace rpr {
 
-int main(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    ::testing::GTEST_FLAG(filter) = "*";
-    return RUN_ALL_TESTS();
+Status LaplaceEnhancer::Enhance(const cv::Mat& orig, cv::Mat* res) {
+  cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
+  cv::filter2D(orig, *res, orig.depth(), kernel);
+  return Status::Ok();
 }
 
+}   // namespace rpr

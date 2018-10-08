@@ -22,13 +22,19 @@
  * SOFTWARE.
 \*****************************************************************************/
 
+#ifndef ROBUST_PALM_ROI_APP_HANDLERS_HANDLER_H_
+#define ROBUST_PALM_ROI_APP_HANDLERS_HANDLER_H_
 
-#include "gtest/gtest.h"
+#include <opencv2/opencv.hpp>
+#include "common/status.h"
 
-int main(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    ::testing::GTEST_FLAG(filter) = "*";
-    return RUN_ALL_TESTS();
-}
+namespace rpr {
 
+class Handler {
+ public:
+  virtual Status Handle(const cv::Mat& orig, cv::Mat* res) = 0;
+};
+
+}   // namespace rpr
+
+#endif  // ROBUST_PALM_ROI_APP_HANDLERS_HANDLER_H_

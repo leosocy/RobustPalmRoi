@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sat Oct 06 2018
+ * Created on Sun Oct 07 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,13 +22,29 @@
  * SOFTWARE.
 \*****************************************************************************/
 
+#include "test_base.h"
+#include "handlers/enhancer.h"
 
-#include "gtest/gtest.h"
+namespace {
 
-int main(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    ::testing::GTEST_FLAG(filter) = "*";
-    return RUN_ALL_TESTS();
+using cv::Mat;
+
+using rpr::Status;
+using rpr::LaplaceEnhancer;
+
+class EnhancerTestFixture : public RobustPalmRoiTestFixtureBase {
+ public:
+  EnhancerTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+};
+
+TEST_F(EnhancerTestFixture, test_laplace_enhancer) {
+  Mat invalid_palm;
+  LaplaceEnhancer enhancer;
+  auto status = enhancer.Handle(invalid_palm, &invalid_palm);
+  EXPECT_EQ(status.code(), Status::kLoadImageError);
+
+  status = enhancer.Handle(complex_env_palm_, &complex_env_palm_);
+  EXPECT_EQ(status.code(), Status::kOk);
 }
 
+}   // namespace
