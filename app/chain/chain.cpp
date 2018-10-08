@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sun Oct 07 2018
+ * Created on Mon Oct 08 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,15 +22,26 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#include "handlers/enhancer.h"
+#include "chain/chain.h"
 
 
 namespace rpr {
 
-Status LaplaceEnhancer::Enhance(const cv::Mat& orig, cv::Mat* res) {
-  cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
-  cv::filter2D(orig, *res, orig.depth(), kernel);
-  return Status::Ok();
+HandlerChain& HandlerChain::Join(std::unique_ptr<Handler> handler) {
+  handlers_.emplace(std::move(handler));
+  return *this;
+}
+
+Status HandlerChain::Process(const cv::Mat& orig, cv::Mat* res) {
+  cv::Mat temp(orig.clone());
+  Status status(Status::Ok());
+  while (!handlers_.empty() && status.IsOk()) {
+    auto handler = std::move(handlers_.front());
+    status = handler->Handle(temp, &temp);
+    handlers_.pop();
+  }
+  *res = temp.clone();
+  return status;
 }
 
 }   // namespace rpr

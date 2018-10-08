@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sun Oct 07 2018
+ * Created on Mon Oct 08 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,15 +22,34 @@
  * SOFTWARE.
 \*****************************************************************************/
 
+#include "test_base.h"
 #include "handlers/enhancer.h"
+#include "chain/chain.h"
 
 
-namespace rpr {
+namespace {
 
-Status LaplaceEnhancer::Enhance(const cv::Mat& orig, cv::Mat* res) {
-  cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
-  cv::filter2D(orig, *res, orig.depth(), kernel);
-  return Status::Ok();
+using cv::Mat;
+
+using rpr::Status;
+using rpr::Handler;
+using rpr::LaplaceEnhancer;
+using rpr::HandlerChain;
+
+class HandlerChainTestFixture : public RobustPalmRoiTestFixtureBase {
+ public:
+  HandlerChainTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+};
+
+
+TEST_F(HandlerChainTestFixture, test_handler_chain) {
+  HandlerChain chain;
+  chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
+  chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
+  chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
+  cv::Mat result;
+  auto status = chain.Process(complex_env_palm_, &result);
+  EXPECT_EQ(status.code(), Status::kOk);
 }
 
-}   // namespace rpr
+}   // namespace

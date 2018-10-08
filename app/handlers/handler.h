@@ -28,6 +28,7 @@
 #include <opencv2/opencv.hpp>
 #include "common/status.h"
 
+
 namespace rpr {
 
 class Handler {
