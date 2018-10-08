@@ -5,6 +5,7 @@
 /test_*
 /cov*
 *.jpg
+*.DS_Store
 
 ### vscode ###
 .vscode

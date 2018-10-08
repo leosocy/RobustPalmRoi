@@ -43,7 +43,7 @@ TEST_F(EnhancerTestFixture, test_laplace_enhancer) {
   auto status = enhancer.Handle(invalid_palm, &invalid_palm);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  status = enhancer.Handle(perfect_palm_, &perfect_palm_);
+  status = enhancer.Handle(complex_env_palm_, &complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 
