@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Mon Oct 08 2018
+ * Created on Tue Oct 09 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -23,9 +23,7 @@
 \*****************************************************************************/
 
 #include "test_base.h"
-#include "handlers/enhancer.h"
 #include "handlers/filter.h"
-#include "chain/chain.h"
 
 
 namespace {
@@ -33,25 +31,21 @@ namespace {
 using cv::Mat;
 
 using rpr::Status;
-using rpr::Handler;
-using rpr::LaplaceEnhancer;
 using rpr::GaussianFilter;
 
-using rpr::HandlerChain;
-
-class HandlerChainTestFixture : public RobustPalmRoiTestFixtureBase {
+class FilterTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
-  HandlerChainTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+  FilterTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
 };
 
 
-TEST_F(HandlerChainTestFixture, test_handler_chain) {
-  HandlerChain chain;
-  chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
-  chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
-  chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
-  cv::Mat result;
-  auto status = chain.Process(complex_env_palm_, &result);
+TEST_F(FilterTestFixture, test_gaussian_filter) {
+  Mat invalid_palm;
+  GaussianFilter filter;
+  auto status = filter.Handle(invalid_palm, &invalid_palm);
+  EXPECT_EQ(status.code(), Status::kLoadImageError);
+
+  status = filter.Handle(complex_env_palm_, &complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

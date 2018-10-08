@@ -22,37 +22,35 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#include "test_base.h"
-#include "handlers/enhancer.h"
-#include "handlers/filter.h"
-#include "chain/chain.h"
+#ifndef ROBUST_PALM_ROI_APP_HANDLERS_FILTER_H_
+#define ROBUST_PALM_ROI_APP_HANDLERS_FILTER_H_
 
+#include "handlers/handler.h"
 
-namespace {
+namespace rpr {
 
-using cv::Mat;
-
-using rpr::Status;
-using rpr::Handler;
-using rpr::LaplaceEnhancer;
-using rpr::GaussianFilter;
-
-using rpr::HandlerChain;
-
-class HandlerChainTestFixture : public RobustPalmRoiTestFixtureBase {
+class Filter : public Handler {
  public:
-  HandlerChainTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+  virtual Status Handle(const cv::Mat& orig, cv::Mat* res);
+
+ protected:
+  virtual Status Blur(const cv::Mat& orig, cv::Mat* res) = 0;
 };
 
-
-TEST_F(HandlerChainTestFixture, test_handler_chain) {
-  HandlerChain chain;
-  chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
-  chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
-  chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
-  cv::Mat result;
-  auto status = chain.Process(complex_env_palm_, &result);
-  EXPECT_EQ(status.code(), Status::kOk);
+inline Status Filter::Handle(const cv::Mat& orig, cv::Mat* res) {
+  assert (res != NULL);
+  if (orig.empty() || orig.channels() != 3) {
+    return Status::LoadImageError("Original palm image must be colored.");
+  }
+  return Blur(orig, res);
 }
 
-}   // namespace
+
+class GaussianFilter : public Filter {
+ private:
+  virtual Status Blur(const cv::Mat& orig, cv::Mat* res);
+};
+
+}   // namespace rpr
+
+#endif  // ROBUST_PALM_ROI_APP_HANDLERS_FILTER_H_
