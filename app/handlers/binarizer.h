@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Mon Oct 08 2018
+ * Created on Tue Oct 09 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,26 +22,36 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#ifndef ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
-#define ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
+#ifndef ROBUST_PALM_ROI_APP_HANDLERS_BINARIZER_H_
+#define ROBUST_PALM_ROI_APP_HANDLERS_BINARIZER_H_
 
-#include <memory>
-#include <list>
-#include <opencv2/opencv.hpp>
 #include "handlers/handler.h"
-#include "common/status.h"
-
 
 namespace rpr {
 
-class HandlerChain {
+class Binarizer : public Handler {
  public:
-  HandlerChain& Join(std::unique_ptr<Handler> handler);
-  Status Process(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Handle(const cv::Mat& orig, cv::Mat* res);
+
+ protected:
+  virtual Status Binary(const cv::Mat& orig, cv::Mat* res) = 0;
+};
+
+inline Status Binarizer::Handle(const cv::Mat& orig, cv::Mat* res) {
+  assert (res != NULL);
+  if (orig.empty()
+      || (orig.channels() != 3 && orig.channels() != 1)) {
+    return Status::LoadImageError("Original palm image must be colored or grayscale.");
+  }
+  return Binary(orig, res);
+}
+
+
+class OtsuBinarizer : public Binarizer {
  private:
-  std::list< std::unique_ptr<Handler> > handlers_;
+  virtual Status Binary(const cv::Mat& orig, cv::Mat* res);
 };
 
 }   // namespace rpr
 
-#endif  // ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
+#endif  // ROBUST_PALM_ROI_APP_HANDLERS_BINARIZER_H_

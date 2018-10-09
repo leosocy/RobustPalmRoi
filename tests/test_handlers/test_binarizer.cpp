@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Mon Oct 08 2018
+ * Created on Tue Oct 09 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,26 +22,30 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#ifndef ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
-#define ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
+#include "test_base.h"
+#include "handlers/binarizer.h"
 
-#include <memory>
-#include <list>
-#include <opencv2/opencv.hpp>
-#include "handlers/handler.h"
-#include "common/status.h"
+namespace {
 
+using cv::Mat;
 
-namespace rpr {
+using rpr::Status;
+using rpr::OtsuBinarizer;
 
-class HandlerChain {
+class BinarizerTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
-  HandlerChain& Join(std::unique_ptr<Handler> handler);
-  Status Process(const cv::Mat& orig, cv::Mat* res);
- private:
-  std::list< std::unique_ptr<Handler> > handlers_;
+  BinarizerTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
 };
 
-}   // namespace rpr
 
-#endif  // ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
+TEST_F(BinarizerTestFixture, test_otsu_binarizer) {
+  Mat invalid_palm;
+  OtsuBinarizer binarizer;
+  auto status = binarizer.Handle(invalid_palm, &invalid_palm);
+  EXPECT_EQ(status.code(), Status::kLoadImageError);
+
+  status = binarizer.Handle(complex_env_palm_, &complex_env_palm_);
+  EXPECT_EQ(status.code(), Status::kOk);
+}
+
+}

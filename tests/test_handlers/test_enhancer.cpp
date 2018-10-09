@@ -25,7 +25,6 @@
 #include "test_base.h"
 #include "handlers/enhancer.h"
 
-
 namespace {
 
 using cv::Mat;

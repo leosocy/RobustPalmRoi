@@ -24,7 +24,6 @@
 
 #include "handlers/enhancer.h"
 
-
 namespace rpr {
 
 Status LaplaceEnhancer::Enhance(const cv::Mat& orig, cv::Mat* res) {

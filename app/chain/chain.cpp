@@ -28,17 +28,17 @@
 namespace rpr {
 
 HandlerChain& HandlerChain::Join(std::unique_ptr<Handler> handler) {
-  handlers_.emplace(std::move(handler));
+  handlers_.emplace_back(std::move(handler));
   return *this;
 }
 
 Status HandlerChain::Process(const cv::Mat& orig, cv::Mat* res) {
   cv::Mat temp(orig.clone());
   Status status(Status::Ok());
-  while (!handlers_.empty() && status.IsOk()) {
-    auto handler = std::move(handlers_.front());
-    status = handler->Handle(temp, &temp);
-    handlers_.pop();
+  auto it = handlers_.begin();
+  while (it != handlers_.end() && status.IsOk()) {
+    status = (*it)->Handle(temp, &temp);
+    it++;
   }
   *res = temp.clone();
   return status;

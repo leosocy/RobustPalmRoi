@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Mon Oct 08 2018
+ * Created on Tue Oct 09 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,26 +22,20 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#ifndef ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
-#define ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
-
-#include <memory>
-#include <list>
-#include <opencv2/opencv.hpp>
-#include "handlers/handler.h"
-#include "common/status.h"
-
+#include "handlers/binarizer.h"
 
 namespace rpr {
 
-class HandlerChain {
- public:
-  HandlerChain& Join(std::unique_ptr<Handler> handler);
-  Status Process(const cv::Mat& orig, cv::Mat* res);
- private:
-  std::list< std::unique_ptr<Handler> > handlers_;
-};
+Status OtsuBinarizer::Binary(const cv::Mat& orig, cv::Mat* res) {
+  if (orig.channels() == 3) {
+    cv::Mat ycrcb, mv[3];
+    cv::cvtColor(orig, ycrcb, CV_BGR2YCrCb);
+    cv::split(ycrcb, mv);
+    cv::threshold(mv[1], *res, 0, 255, CV_THRESH_OTSU);
+  } else {
+    cv::threshold(orig, *res, 0, 255, CV_THRESH_OTSU);
+  }
+  return Status::Ok();
+}
 
 }   // namespace rpr
-
-#endif  // ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
