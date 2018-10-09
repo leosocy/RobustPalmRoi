@@ -25,8 +25,8 @@
 #include "test_base.h"
 #include "handlers/enhancer.h"
 #include "handlers/filter.h"
+#include "handlers/binarizer.h"
 #include "chain/chain.h"
-
 
 namespace {
 
@@ -36,6 +36,7 @@ using rpr::Status;
 using rpr::Handler;
 using rpr::LaplaceEnhancer;
 using rpr::GaussianFilter;
+using rpr::OtsuBinarizer;
 
 using rpr::HandlerChain;
 
@@ -49,7 +50,7 @@ TEST_F(HandlerChainTestFixture, test_handler_chain) {
   HandlerChain chain;
   chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
   chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
-  chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
+  chain.Join(std::unique_ptr<Handler>(new OtsuBinarizer));
   cv::Mat result;
   auto status = chain.Process(complex_env_palm_, &result);
   EXPECT_EQ(status.code(), Status::kOk);

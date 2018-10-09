@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sun Oct 07 2018
+ * Created on Tue Oct 09 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,13 +22,19 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#include "handlers/enhancer.h"
+#include "handlers/binarizer.h"
 
 namespace rpr {
 
-Status LaplaceEnhancer::Enhance(const cv::Mat& orig, cv::Mat* res) {
-  cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
-  cv::filter2D(orig, *res, orig.depth(), kernel);
+Status OtsuBinarizer::Binary(const cv::Mat& orig, cv::Mat* res) {
+  if (orig.channels() == 3) {
+    cv::Mat ycrcb, mv[3];
+    cv::cvtColor(orig, ycrcb, CV_BGR2YCrCb);
+    cv::split(ycrcb, mv);
+    cv::threshold(mv[1], *res, 0, 255, CV_THRESH_OTSU);
+  } else {
+    cv::threshold(orig, *res, 0, 255, CV_THRESH_OTSU);
+  }
   return Status::Ok();
 }
 

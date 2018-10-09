@@ -25,7 +25,6 @@
 #include <opencv2/imgproc.hpp>
 #include "handlers/filter.h"
 
-
 namespace rpr {
 
 Status GaussianFilter::Blur(const cv::Mat& orig, cv::Mat* res) {

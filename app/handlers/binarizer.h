@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Sun Oct 07 2018
+ * Created on Tue Oct 09 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,14 +22,35 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#include "handlers/enhancer.h"
+#ifndef ROBUST_PALM_ROI_APP_HANDLERS_BINARIZER_H_
+#define ROBUST_PALM_ROI_APP_HANDLERS_BINARIZER_H_
+
+#include "handlers/handler.h"
 
 namespace rpr {
 
-Status LaplaceEnhancer::Enhance(const cv::Mat& orig, cv::Mat* res) {
-  cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
-  cv::filter2D(orig, *res, orig.depth(), kernel);
-  return Status::Ok();
+class Binarizer : public Handler {
+ public:
+  virtual Status Handle(const cv::Mat& orig, cv::Mat* res);
+
+ protected:
+  virtual Status Binary(const cv::Mat& orig, cv::Mat* res) = 0;
+};
+
+inline Status Binarizer::Handle(const cv::Mat& orig, cv::Mat* res) {
+  assert (res != NULL);
+  if (orig.channels() != 3 && orig.channels() != 1) {
+    return Status::LoadImageError("Original palm image must be colored or grayscale.");
+  }
+  return Binary(orig, res);
 }
 
+
+class OtsuBinarizer : public Binarizer {
+ private:
+  virtual Status Binary(const cv::Mat& orig, cv::Mat* res);
+};
+
 }   // namespace rpr
+
+#endif  // ROBUST_PALM_ROI_APP_HANDLERS_BINARIZER_H_

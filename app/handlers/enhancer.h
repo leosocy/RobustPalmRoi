@@ -27,7 +27,6 @@
 
 #include "handlers/handler.h"
 
-
 namespace rpr {
 
 class Enhancer : public Handler {
