@@ -26,7 +26,7 @@
 #define ROBUST_PALM_ROI_APP_CHAIN_CHAIN_H_
 
 #include <memory>
-#include <queue>
+#include <list>
 #include <opencv2/opencv.hpp>
 #include "handlers/handler.h"
 #include "common/status.h"
@@ -39,7 +39,7 @@ class HandlerChain {
   HandlerChain& Join(std::unique_ptr<Handler> handler);
   Status Process(const cv::Mat& orig, cv::Mat* res);
  private:
-  std::queue< std::unique_ptr<Handler> > handlers_;
+  std::list< std::unique_ptr<Handler> > handlers_;
 };
 
 }   // namespace rpr
