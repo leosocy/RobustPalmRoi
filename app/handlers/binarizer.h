@@ -39,7 +39,8 @@ class Binarizer : public Handler {
 
 inline Status Binarizer::Handle(const cv::Mat& orig, cv::Mat* res) {
   assert (res != NULL);
-  if (orig.channels() != 3 && orig.channels() != 1) {
+  if (orig.empty()
+      || (orig.channels() != 3 && orig.channels() != 1)) {
     return Status::LoadImageError("Original palm image must be colored or grayscale.");
   }
   return Binary(orig, res);

@@ -23,29 +23,29 @@
 \*****************************************************************************/
 
 #include "test_base.h"
-#include "handlers/filter.h"
+#include "handlers/binarizer.h"
 
 namespace {
 
 using cv::Mat;
 
 using rpr::Status;
-using rpr::GaussianFilter;
+using rpr::OtsuBinarizer;
 
-class FilterTestFixture : public RobustPalmRoiTestFixtureBase {
+class BinarizerTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
-  FilterTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+  BinarizerTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
 };
 
 
-TEST_F(FilterTestFixture, test_gaussian_filter) {
+TEST_F(BinarizerTestFixture, test_otsu_binarizer) {
   Mat invalid_palm;
-  GaussianFilter filter;
-  auto status = filter.Handle(invalid_palm, &invalid_palm);
+  OtsuBinarizer binarizer;
+  auto status = binarizer.Handle(invalid_palm, &invalid_palm);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  status = filter.Handle(complex_env_palm_, &complex_env_palm_);
+  status = binarizer.Handle(complex_env_palm_, &complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 
-}   // namespace
+}
