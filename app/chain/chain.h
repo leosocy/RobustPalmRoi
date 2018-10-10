@@ -31,7 +31,6 @@
 #include "handlers/handler.h"
 #include "common/status.h"
 
-
 namespace rpr {
 
 class HandlerChain {
