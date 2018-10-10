@@ -22,42 +22,34 @@
  * SOFTWARE.
 \*****************************************************************************/
 
+#include "test_base.h"
+#include "handlers/binarizer.h"
 #include "handlers/adjuster.h"
 
-namespace rpr {
+namespace {
 
-Status RemoveNoiseAdjuster::Adjust(const cv::Mat& orig, cv::Mat* res) {
-  SmoothBoundary(orig, res);
+using cv::Mat;
 
-  std::vector< std::vector<cv::Point> > contours;
-  std::vector<cv::Vec4i> hierarchy;
-  cv::findContours(*res, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
-  int palm_index = FindMaxContourAreaIndex(contours, hierarchy);
+using rpr::Status;
+using rpr::OtsuBinarizer;
+using rpr::RemoveNoiseAdjuster;
 
-  cv::Mat temp(cv::Mat::zeros(orig.size(),CV_8U));
-  cv::drawContours(temp, contours, palm_index, CV_RGB(255, 255, 255), CV_FILLED);
-  *res = temp.clone();
+class AdjusterTestFixture : public RobustPalmRoiTestFixtureBase {
+ public:
+  AdjusterTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+};
 
-  return Status::Ok();
+
+TEST_F(AdjusterTestFixture, test_remove_noise_adjuster) {
+  RemoveNoiseAdjuster adjuster;
+  auto status = adjuster.Handle(perfect_palm_, &perfect_palm_);
+  EXPECT_EQ(status.code(), Status::kLoadImageError);
+
+  cv::Mat res;
+  OtsuBinarizer binarizer;
+  binarizer.Handle(perfect_palm_, &res);
+  status = adjuster.Handle(res, &res);
+  EXPECT_EQ(status.code(), Status::kOk);
 }
 
-void RemoveNoiseAdjuster::SmoothBoundary(const cv::Mat& src, cv::Mat* dst) {
-  cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
-  cv::morphologyEx(src, *dst, cv::MORPH_ELLIPSE, element);
 }
-
-int RemoveNoiseAdjuster::FindMaxContourAreaIndex(const std::vector< std::vector<cv::Point> >& contours,
-                                                 const std::vector<cv::Vec4i>& hierarchy) {
-  double max_con_area = 0.0;
-  int max_con_index = 0;
-  for (int index = 0; index >= 0; index = hierarchy[index][0]) {
-    double con_area = cv::contourArea(contours[index]);
-    if (con_area > max_con_area) {
-      max_con_area = con_area;
-      max_con_index = index;
-    }
-  }
-  return max_con_index;
-}
-
-}   // namespace rpr

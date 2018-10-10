@@ -26,6 +26,7 @@
 #include "handlers/enhancer.h"
 #include "handlers/filter.h"
 #include "handlers/binarizer.h"
+#include "handlers/adjuster.h"
 #include "chain/chain.h"
 
 namespace {
@@ -37,6 +38,7 @@ using rpr::Handler;
 using rpr::LaplaceEnhancer;
 using rpr::GaussianFilter;
 using rpr::OtsuBinarizer;
+using rpr::RemoveNoiseAdjuster;
 
 using rpr::HandlerChain;
 
@@ -51,6 +53,7 @@ TEST_F(HandlerChainTestFixture, test_handler_chain) {
   chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
   chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
   chain.Join(std::unique_ptr<Handler>(new OtsuBinarizer));
+  chain.Join(std::unique_ptr<Handler>(new RemoveNoiseAdjuster));
   cv::Mat result;
   auto status = chain.Process(complex_env_palm_, &result);
   EXPECT_EQ(status.code(), Status::kOk);
