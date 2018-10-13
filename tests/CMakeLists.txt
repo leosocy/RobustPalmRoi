@@ -15,6 +15,7 @@ IF(${CMAKE_BUILD_TEST})
 ENDIF()
 SET(CMAKE_CXX_FLAGS  "--std=c++11 ${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Download and unpack googletest at configure time
 CONFIGURE_FILE(${PROJECT_ROOT}/thirdparty/gtest/CMakeLists.txt.in googletest-download/CMakeLists.txt)

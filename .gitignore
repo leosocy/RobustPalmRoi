@@ -6,6 +6,7 @@
 /cov*
 *.jpg
 *.DS_Store
+.ycm*
 
 ### vscode ###
 .vscode

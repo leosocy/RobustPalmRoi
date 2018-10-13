@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Mon Oct 08 2018
+ * Created on Wed Oct 10 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -23,42 +23,46 @@
 \*****************************************************************************/
 
 #include "test_base.h"
-#include "handlers/enhancer.h"
-#include "handlers/filter.h"
 #include "handlers/binarizer.h"
 #include "handlers/adjuster.h"
-#include "chain/chain.h"
 
 namespace {
 
 using cv::Mat;
 
 using rpr::Status;
-using rpr::Handler;
-using rpr::LaplaceEnhancer;
-using rpr::GaussianFilter;
 using rpr::OtsuBinarizer;
 using rpr::NoiseAdjuster;
 using rpr::AngleAdjuster;
 
-using rpr::HandlerChain;
-
-class HandlerChainTestFixture : public RobustPalmRoiTestFixtureBase {
+class AdjusterTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
-  HandlerChainTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+  AdjusterTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
 };
 
 
-TEST_F(HandlerChainTestFixture, test_handler_chain) {
-  HandlerChain chain;
-  chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
-  chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
-  chain.Join(std::unique_ptr<Handler>(new OtsuBinarizer));
-  chain.Join(std::unique_ptr<Handler>(new NoiseAdjuster));
-  chain.Join(std::unique_ptr<Handler>(new AngleAdjuster));
-  cv::Mat result;
-  auto status = chain.Process(complex_env_palm_, &result);
+TEST_F(AdjusterTestFixture, test_noise_adjuster) {
+  NoiseAdjuster adjuster;
+  auto status = adjuster.Handle(perfect_palm_, &perfect_palm_);
+  EXPECT_EQ(status.code(), Status::kLoadImageError);
+
+  cv::Mat res;
+  OtsuBinarizer binarizer;
+  binarizer.Handle(perfect_palm_, &res);
+  status = adjuster.Handle(res, &res);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 
-}   // namespace
+TEST_F(AdjusterTestFixture, test_angle_adjuster) {
+  AngleAdjuster adjuster;
+  auto status = adjuster.Handle(perfect_palm_, &perfect_palm_);
+  EXPECT_EQ(status.code(), Status::kLoadImageError);
+
+  cv::Mat res;
+  OtsuBinarizer binarizer;
+  binarizer.Handle(perfect_palm_, &res);
+  status = adjuster.Handle(res, &res);
+  EXPECT_EQ(status.code(), Status::kOk);
+}
+
+}

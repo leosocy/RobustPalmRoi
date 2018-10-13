@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Mon Oct 08 2018
+ * Created on Fri Oct 12 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,43 +22,38 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#include "test_base.h"
-#include "handlers/enhancer.h"
-#include "handlers/filter.h"
-#include "handlers/binarizer.h"
-#include "handlers/adjuster.h"
-#include "chain/chain.h"
+#include "utilities/image_operator.h"
 
-namespace {
+namespace rpr {
 
-using cv::Mat;
+namespace utility {
 
-using rpr::Status;
-using rpr::Handler;
-using rpr::LaplaceEnhancer;
-using rpr::GaussianFilter;
-using rpr::OtsuBinarizer;
-using rpr::NoiseAdjuster;
-using rpr::AngleAdjuster;
-
-using rpr::HandlerChain;
-
-class HandlerChainTestFixture : public RobustPalmRoiTestFixtureBase {
- public:
-  HandlerChainTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
-};
-
-
-TEST_F(HandlerChainTestFixture, test_handler_chain) {
-  HandlerChain chain;
-  chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
-  chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
-  chain.Join(std::unique_ptr<Handler>(new OtsuBinarizer));
-  chain.Join(std::unique_ptr<Handler>(new NoiseAdjuster));
-  chain.Join(std::unique_ptr<Handler>(new AngleAdjuster));
-  cv::Mat result;
-  auto status = chain.Process(complex_env_palm_, &result);
-  EXPECT_EQ(status.code(), Status::kOk);
+void GetCenterOfGravity(const cv::Mat& src, cv::Point* center, bool is_binary) {
+  cv::Moments moment = cv::moments(src, is_binary);
+  center->x = moment.m10 / moment.m00;
+  center->y = moment.m01 / moment.m00;
 }
 
-}   // namespace
+void RotateImage(const cv::Mat& src, cv::Mat* dst, double angle) {
+  double radian = angle / 180.0 * CV_PI;
+  double sin_value = fabs(sin(radian));
+  double cos_value = fabs(cos(radian));
+
+  int diagonal = sqrt(src.cols * src.cols + src.rows * src.rows);
+  int target_width = src.cols * cos_value + src.rows * sin_value;
+  int target_height = src.rows * cos_value + src.cols * sin_value;
+  cv::Rect target_rect((diagonal - target_width) / 2, (diagonal - target_height) / 2,
+                       target_width, target_height);
+
+  cv::Mat temp(diagonal, diagonal, src.type(), cv::Scalar());
+  cv::Mat roi(temp, cv::Rect((diagonal - src.cols) / 2, (diagonal - src.rows) / 2, src.cols, src.rows));
+  src.copyTo(roi);
+
+  cv::Mat affine = cv::getRotationMatrix2D(cv::Point2f(diagonal / 2.0, diagonal / 2.0), angle, 1.0);
+  cv::warpAffine(temp, *dst, affine, temp.size());
+  *dst = cv::Mat(*dst, target_rect);
+}
+
+}   // namespace utility
+
+}   // namespace rpr

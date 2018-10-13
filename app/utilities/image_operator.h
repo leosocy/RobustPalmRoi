@@ -1,5 +1,5 @@
 /****************************************************************************\
- * Created on Mon Oct 08 2018
+ * Created on Fri Oct 12 2018
  * 
  * The MIT License (MIT)
  * Copyright (c) 2018 leosocy
@@ -22,43 +22,24 @@
  * SOFTWARE.
 \*****************************************************************************/
 
-#include "test_base.h"
-#include "handlers/enhancer.h"
-#include "handlers/filter.h"
-#include "handlers/binarizer.h"
-#include "handlers/adjuster.h"
-#include "chain/chain.h"
+#ifndef ROBUST_PALM_ROI_APP_UTILITIES_IMAGE_OPERATOR_H_
+#define ROBUST_PALM_ROI_APP_UTILITIES_IMAGE_OPERATOR_H_
 
-namespace {
+#include <opencv2/opencv.hpp>
 
-using cv::Mat;
+namespace rpr {
 
-using rpr::Status;
-using rpr::Handler;
-using rpr::LaplaceEnhancer;
-using rpr::GaussianFilter;
-using rpr::OtsuBinarizer;
-using rpr::NoiseAdjuster;
-using rpr::AngleAdjuster;
+namespace utility {
 
-using rpr::HandlerChain;
+void GetCenterOfGravity(const cv::Mat& src, cv::Point* center, bool is_binary = true);
 
-class HandlerChainTestFixture : public RobustPalmRoiTestFixtureBase {
- public:
-  HandlerChainTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
-};
+// @param angle Rotation angle in degrees.
+// Positive values mean counter-clockwise rotation
+// (the coordinate origin is assumed to be the center).
+void RotateImage(const cv::Mat& src, cv::Mat* dst, double angle);
 
+}   // namespace utility
 
-TEST_F(HandlerChainTestFixture, test_handler_chain) {
-  HandlerChain chain;
-  chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
-  chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
-  chain.Join(std::unique_ptr<Handler>(new OtsuBinarizer));
-  chain.Join(std::unique_ptr<Handler>(new NoiseAdjuster));
-  chain.Join(std::unique_ptr<Handler>(new AngleAdjuster));
-  cv::Mat result;
-  auto status = chain.Process(complex_env_palm_, &result);
-  EXPECT_EQ(status.code(), Status::kOk);
-}
+}   // namespace rpr
 
-}   // namespace
+#endif  // ROBUST_PALM_ROI_APP_UTILITIES_IMAGE_OPERATOR_H_
