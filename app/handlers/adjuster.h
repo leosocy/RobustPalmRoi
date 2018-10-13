@@ -45,12 +45,20 @@ inline Status Adjuster::Handle(const cv::Mat& orig, cv::Mat* res) {
   return Adjust(orig, res);
 }
 
-class RemoveNoiseAdjuster : public Adjuster {
+
+class NoiseAdjuster : public Adjuster {
  private:
   virtual Status Adjust(const cv::Mat& orig, cv::Mat* res);
   void SmoothBoundary(const cv::Mat& src, cv::Mat* dst);
   int FindMaxContourAreaIndex(const std::vector< std::vector<cv::Point> >& contours,
                               const std::vector<cv::Vec4i>& hierarchy);
+};
+
+
+class AngleAdjuster : public Adjuster {
+ private:
+  virtual Status Adjust(const cv::Mat& orig, cv::Mat* res);
+  void ErodeFinger(const cv::Mat& src, cv::Mat* dst);
 };
 
 }   // namespace rpr

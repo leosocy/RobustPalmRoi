@@ -23,10 +23,11 @@
 \*****************************************************************************/
 
 #include "handlers/adjuster.h"
+#include "utilities/image_operator.h"
 
 namespace rpr {
 
-Status RemoveNoiseAdjuster::Adjust(const cv::Mat& orig, cv::Mat* res) {
+Status NoiseAdjuster::Adjust(const cv::Mat& orig, cv::Mat* res) {
   SmoothBoundary(orig, res);
 
   std::vector< std::vector<cv::Point> > contours;
@@ -41,12 +42,12 @@ Status RemoveNoiseAdjuster::Adjust(const cv::Mat& orig, cv::Mat* res) {
   return Status::Ok();
 }
 
-void RemoveNoiseAdjuster::SmoothBoundary(const cv::Mat& src, cv::Mat* dst) {
+void NoiseAdjuster::SmoothBoundary(const cv::Mat& src, cv::Mat* dst) {
   cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
   cv::morphologyEx(src, *dst, cv::MORPH_ELLIPSE, element);
 }
 
-int RemoveNoiseAdjuster::FindMaxContourAreaIndex(const std::vector< std::vector<cv::Point> >& contours,
+int NoiseAdjuster::FindMaxContourAreaIndex(const std::vector< std::vector<cv::Point> >& contours,
                                                  const std::vector<cv::Vec4i>& hierarchy) {
   double max_con_area = 0.0;
   int max_con_index = 0;
@@ -58,6 +59,33 @@ int RemoveNoiseAdjuster::FindMaxContourAreaIndex(const std::vector< std::vector<
     }
   }
   return max_con_index;
+}
+
+
+Status AngleAdjuster::Adjust(const cv::Mat& orig, cv::Mat* res) {
+  using utility::GetCenterOfGravity;
+  using utility::RotateImage;
+
+  cv::Point center1;  // gravity of full palm
+  GetCenterOfGravity(orig, &center1);
+
+  cv::Mat erode_palm;
+  ErodeFinger(orig, &erode_palm);
+  cv::Point center2;  // gravity of palm which erode finger
+  GetCenterOfGravity(erode_palm, &center2);
+
+  cv::Point sub(center1.x - center2.x, center2.y - center1.y);
+  double angle = acos(sub.y / sqrt(sub.x * sub.x + sub.y * sub.y)) / CV_PI * 180.0;
+  if (sub.x < 0) {
+    angle *= -1;
+  }
+  RotateImage(orig, res, angle);
+  return Status::Ok();
+}
+
+void AngleAdjuster::ErodeFinger(const cv::Mat& src, cv::Mat* dst) {
+  cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
+  cv::erode(src, *dst, element, cv::Point(-1, -1), 5);
 }
 
 }   // namespace rpr

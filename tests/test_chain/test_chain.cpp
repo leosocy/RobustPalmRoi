@@ -38,7 +38,8 @@ using rpr::Handler;
 using rpr::LaplaceEnhancer;
 using rpr::GaussianFilter;
 using rpr::OtsuBinarizer;
-using rpr::RemoveNoiseAdjuster;
+using rpr::NoiseAdjuster;
+using rpr::AngleAdjuster;
 
 using rpr::HandlerChain;
 
@@ -53,7 +54,8 @@ TEST_F(HandlerChainTestFixture, test_handler_chain) {
   chain.Join(std::unique_ptr<Handler>(new GaussianFilter));
   chain.Join(std::unique_ptr<Handler>(new LaplaceEnhancer));
   chain.Join(std::unique_ptr<Handler>(new OtsuBinarizer));
-  chain.Join(std::unique_ptr<Handler>(new RemoveNoiseAdjuster));
+  chain.Join(std::unique_ptr<Handler>(new NoiseAdjuster));
+  chain.Join(std::unique_ptr<Handler>(new AngleAdjuster));
   cv::Mat result;
   auto status = chain.Process(complex_env_palm_, &result);
   EXPECT_EQ(status.code(), Status::kOk);
