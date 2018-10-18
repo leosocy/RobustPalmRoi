@@ -8,7 +8,7 @@
 #include "handlers/binarizer.h"
 #include "handlers/adjuster.h"
 #include "handlers/detector.h"
-#include "chain/chain.h"
+#include "controllers/chain.h"
 
 namespace {
 

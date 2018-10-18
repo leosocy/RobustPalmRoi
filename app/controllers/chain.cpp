@@ -3,7 +3,7 @@
 // that can be found in the LICENSE file.
 
 #include <ctime>
-#include "chain/chain.h"
+#include "controllers/chain.h"
 
 
 namespace rpr {
