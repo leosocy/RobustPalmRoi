@@ -17,9 +17,11 @@ class Status {
   enum Code {
     kOk = 0,
     kLoadImageError,
+    kImageLowQualityError,
   };
   static Status Ok(const char* msg = NULL) { return Status(kOk, msg); }
   static Status LoadImageError(const char* msg = NULL) { return Status(kLoadImageError, msg); }
+  static Status ImageLowQualityError(const char* msg = NULL) { return Status(kImageLowQualityError); }
 
   Status() : state_(NULL) {}
   Status(const Status& s) {

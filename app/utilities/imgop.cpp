@@ -48,7 +48,7 @@ void WarpAffineImageOperator::ReflectPoints(const std::vector<cv::Point>& srcs,
   for (auto p : srcs) {
     cv::Point dp;
     double x = p.x - center.x;
-	  double y = p.y - center.y;
+    double y = p.y - center.y;
     dp.x = cvRound(x * vcos / scale_ + y * vsin / scale_ + center.x + (orig_.cols - res_size_.width) / 2);
     dp.y = cvRound(y * vcos / scale_ - x * vsin / scale_ + center.y + (orig_.rows - res_size_.height) / 2);
     dsts->emplace_back(dp);
