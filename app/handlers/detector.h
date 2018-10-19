@@ -6,25 +6,25 @@
 #define ROBUST_PALM_ROI_APP_HANDLERS_DETECTOR_H_
 
 #include <vector>
+#include "common/types.h"
 #include "handlers/handler.h"
 
 namespace rpr {
 
 class Detector : public Handler {
  public:
-  virtual Status Handle(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Handle(PalmInfoDTO& palm);
  protected:
-  bool ImageOneContour(const cv::Mat& src);
-  virtual Status Detect(const cv::Mat& orig, cv::Mat* res) = 0;
-  std::vector<cv::Point> palm_contour_;
+  bool ImageOneContour(PalmInfoDTO& palm);
+  virtual Status Detect(PalmInfoDTO& palm) = 0;
 };
 
-inline Status Detector::Handle(const cv::Mat& orig, cv::Mat* res) {
-  assert (res != NULL);
-  if (orig.empty() || orig.channels() != 1 || !ImageOneContour(orig)) {
+inline Status Detector::Handle(PalmInfoDTO& palm) {
+  const cv::Mat& orig = palm.PrevHandleRes(); 
+  if (orig.empty() || orig.channels() != 1 || !ImageOneContour(palm)) {
     return Status::LoadImageError("Original palm image must be binary and just has one contour.");
   }
-  return Detect(orig, res);
+  return Detect(palm);
 }
 
 
@@ -35,14 +35,9 @@ class PeakValleyDetector : public Detector {
     RIGHT = -1
   };
 
-  virtual Status Detect(const cv::Mat& orig, cv::Mat* res);
-  void FindHalfSideInflectionPoints(PalmSide side);
-  size_t FindNextInflectionPoint(const std::vector<cv::Point>& contour,
-                                 size_t from_index, size_t to_index, int step, bool is_maximum,
-                                  cv::Point* point);
-
-  std::vector<cv::Point> peaks_;    //  order is from left to right
-  std::vector<cv::Point> valleys_;  //  order is from left to right
+  virtual Status Detect(PalmInfoDTO& palm);
+  void FindHalfSideInflectionPoints(const Points& contour, PalmSide side, Points& peaks, Points& valleys);
+  size_t FindNextInflectionPoint(const Points& contour, size_t from_index, size_t to_index, int step, bool is_maximum);
 };
 
 }   // namespace rpr

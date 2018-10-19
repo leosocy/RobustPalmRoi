@@ -16,7 +16,7 @@ namespace rpr {
 class HandlerChain {
  public:
   HandlerChain& Join(std::unique_ptr<Handler> handler);
-  Status Process(const cv::Mat& orig, cv::Mat* res);
+  Status Process(PalmInfoDTO& palm);
  private:
   std::list< std::unique_ptr<Handler> > handlers_;
 };

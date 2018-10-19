@@ -19,12 +19,11 @@ class EnhancerTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(EnhancerTestFixture, test_laplace_enhancer) {
-  Mat invalid_palm;
   LaplaceEnhancer enhancer;
-  auto status = enhancer.Handle(invalid_palm, &invalid_palm);
+  auto status = enhancer.Handle(invalid_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  status = enhancer.Handle(complex_env_palm_, &complex_env_palm_);
+  status = enhancer.Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

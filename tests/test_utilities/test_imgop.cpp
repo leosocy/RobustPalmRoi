@@ -16,20 +16,20 @@ class ImageOperateTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(ImageOperateTestFixture, test_warp_affine_image_operator_do) {
-  WarpAffineImageOperator op(perfect_palm_, 90, 0.5);
+  WarpAffineImageOperator op(perfect_palm_.PrevHandleRes(), 90, 0.5);
   cv::Mat res;
   op.Do(&res);
-  EXPECT_EQ(res.size(), cv::Size(perfect_palm_.rows / 2, perfect_palm_.cols / 2));
+  EXPECT_EQ(res.size(), cv::Size(perfect_palm_.PrevHandleRes().rows / 2, perfect_palm_.PrevHandleRes().cols / 2));
 }
 
 TEST_F(ImageOperateTestFixture, test_warp_affine_image_operator_reflect_points) {
-  WarpAffineImageOperator op(perfect_palm_, 90, 0.5);
+  WarpAffineImageOperator op(perfect_palm_.PrevHandleRes(), 90, 0.5);
   cv::Mat res;
   op.Do(&res);
   std::vector<cv::Point> srcs({cv::Point(0, 10)});
   std::vector<cv::Point> dsts;
   op.ReflectPoints(srcs, &dsts);
-  EXPECT_EQ(dsts[0].x, perfect_palm_.cols - 20);
+  EXPECT_EQ(dsts[0].x, perfect_palm_.PrevHandleRes().cols - 20);
   EXPECT_EQ(dsts[0].y, 0);
 }
 

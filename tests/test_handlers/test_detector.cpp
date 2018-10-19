@@ -20,7 +20,7 @@ class DetectorTestFixture : public RobustPalmRoiTestFixtureBase {
 
 TEST_F(DetectorTestFixture, test_peak_valley_detector) {
   PeakValleyDetector detector;
-  auto status = detector.Handle(perfect_palm_, &perfect_palm_);
+  auto status = detector.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 }
 

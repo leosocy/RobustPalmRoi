@@ -13,19 +13,17 @@ HandlerChain& HandlerChain::Join(std::unique_ptr<Handler> handler) {
   return *this;
 }
 
-Status HandlerChain::Process(const cv::Mat& orig, cv::Mat* res) {
-  cv::Mat temp(orig.clone());
+Status HandlerChain::Process(PalmInfoDTO& palm) {
   Status status(Status::Ok());
   clock_t start, end;
   auto it = handlers_.begin();
   while (it != handlers_.end() && status.IsOk()) {
     start = clock();
-    status = (*it)->Handle(temp, &temp);
+    status = (*it)->Handle(palm);
     end = clock();
     printf("Handler cost time: %f ms\n", double(end - start) / CLOCKS_PER_SEC * 1000);
     it++;
   }
-  *res = temp.clone();
   return status;
 }
 

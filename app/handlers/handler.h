@@ -7,13 +7,14 @@
 
 #include <opencv2/opencv.hpp>
 #include "common/status.h"
+#include "common/palm.h"
 
 
 namespace rpr {
 
 class Handler {
  public:
-  virtual Status Handle(const cv::Mat& orig, cv::Mat* res) = 0;
+  virtual Status Handle(PalmInfoDTO& palm) = 0;
 };
 
 }   // namespace rpr

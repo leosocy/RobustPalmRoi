@@ -19,12 +19,11 @@ class FilterTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(FilterTestFixture, test_gaussian_filter) {
-  Mat invalid_palm;
   GaussianFilter filter;
-  auto status = filter.Handle(invalid_palm, &invalid_palm);
+  auto status = filter.Handle(invalid_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  status = filter.Handle(complex_env_palm_, &complex_env_palm_);
+  status = filter.Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

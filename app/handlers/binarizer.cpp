@@ -6,15 +6,20 @@
 
 namespace rpr {
 
-Status OtsuBinarizer::Binary(const cv::Mat& orig, cv::Mat* res) {
+Status OtsuBinarizer::Binary(PalmInfoDTO& palm) {
+  const cv::Mat& orig = palm.PrevHandleRes();
+  cv::Mat res;
+
   if (orig.channels() == 3) {
     cv::Mat ycrcb, mv[3];
     cv::cvtColor(orig, ycrcb, CV_BGR2YCrCb);
     cv::split(ycrcb, mv);
-    cv::threshold(mv[1], *res, 0, 255, CV_THRESH_OTSU);
+    cv::threshold(mv[1], res, 0, 255, CV_THRESH_OTSU);
   } else {
-    cv::threshold(orig, *res, 0, 255, CV_THRESH_OTSU);
+    cv::threshold(orig, res, 0, 255, CV_THRESH_OTSU);
   }
+
+  palm.SetCurHandleRes(res);
   return Status::Ok();
 }
 

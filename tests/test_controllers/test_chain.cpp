@@ -40,7 +40,7 @@ TEST_F(HandlerChainTestFixture, test_handler_chain) {
   chain.Join(std::unique_ptr<Handler>(new AngleAdjuster));
   chain.Join(std::unique_ptr<Handler>(new PeakValleyDetector));
   cv::Mat result;
-  auto status = chain.Process(complex_env_palm_, &result);
+  auto status = chain.Process(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

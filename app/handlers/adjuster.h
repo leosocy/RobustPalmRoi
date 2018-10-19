@@ -12,23 +12,23 @@ namespace rpr {
 
 class Adjuster : public Handler {
  public:
-  virtual Status Handle(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Handle(PalmInfoDTO& palm);
  protected:
-  virtual Status Adjust(const cv::Mat& orig, cv::Mat* res) = 0;
+  virtual Status Adjust(PalmInfoDTO& palm) = 0;
 };
 
-inline Status Adjuster::Handle(const cv::Mat& orig, cv::Mat* res) {
-  assert (res != NULL);
+inline Status Adjuster::Handle(PalmInfoDTO& palm) {
+  const cv::Mat& orig = palm.PrevHandleRes(); 
   if (orig.empty() || orig.channels() != 1) {
     return Status::LoadImageError("Original palm image must be binary.");
   }
-  return Adjust(orig, res);
+  return Adjust(palm);
 }
 
 
 class NoiseAdjuster : public Adjuster {
  private:
-  virtual Status Adjust(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Adjust(PalmInfoDTO& palm);
   void SmoothBoundary(const cv::Mat& src, cv::Mat* dst);
   int FindMaxContourAreaIndex(const std::vector< std::vector<cv::Point> >& contours,
                               const std::vector<cv::Vec4i>& hierarchy);
@@ -37,7 +37,7 @@ class NoiseAdjuster : public Adjuster {
 
 class AngleAdjuster : public Adjuster {
  private:
-  virtual Status Adjust(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Adjust(PalmInfoDTO& palm);
   void ErodeFinger(const cv::Mat& src, cv::Mat* dst);
 };
 

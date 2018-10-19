@@ -7,18 +7,22 @@
 
 namespace rpr {
 
-Status NoiseAdjuster::Adjust(const cv::Mat& orig, cv::Mat* res) {
-  SmoothBoundary(orig, res);
+Status NoiseAdjuster::Adjust(PalmInfoDTO& palm) {
+  const cv::Mat& orig = palm.PrevHandleRes();
+  cv::Mat res;
+
+  SmoothBoundary(orig, &res);
 
   std::vector< std::vector<cv::Point> > contours;
   std::vector<cv::Vec4i> hierarchy;
-  cv::findContours(*res, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+  cv::findContours(res, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
   int palm_index = FindMaxContourAreaIndex(contours, hierarchy);
 
   cv::Mat temp(cv::Mat::zeros(orig.size(),CV_8U));
   cv::drawContours(temp, contours, palm_index, CV_RGB(255, 255, 255), CV_FILLED);
-  *res = temp.clone();
+  res = temp.clone();
 
+  palm.SetCurHandleRes(res);
   return Status::Ok();
 }
 
@@ -28,7 +32,7 @@ void NoiseAdjuster::SmoothBoundary(const cv::Mat& src, cv::Mat* dst) {
 }
 
 int NoiseAdjuster::FindMaxContourAreaIndex(const std::vector< std::vector<cv::Point> >& contours,
-                                                 const std::vector<cv::Vec4i>& hierarchy) {
+                                           const std::vector<cv::Vec4i>& hierarchy) {
   double max_con_area = 0.0;
   int max_con_index = 0;
   for (int index = 0; index >= 0; index = hierarchy[index][0]) {
@@ -42,9 +46,12 @@ int NoiseAdjuster::FindMaxContourAreaIndex(const std::vector< std::vector<cv::Po
 }
 
 
-Status AngleAdjuster::Adjust(const cv::Mat& orig, cv::Mat* res) {
+Status AngleAdjuster::Adjust(PalmInfoDTO& palm) {
   using utility::GetCenterOfGravity;
   using utility::WarpAffineImageOperator;
+
+  const cv::Mat& orig = palm.PrevHandleRes();
+  cv::Mat res;
 
   cv::Point center1;  // gravity of full palm
   GetCenterOfGravity(orig, &center1);
@@ -63,8 +70,11 @@ Status AngleAdjuster::Adjust(const cv::Mat& orig, cv::Mat* res) {
   if (sub.x < 0) {
     angle *= -1;
   }
-  WarpAffineImageOperator op(orig, angle);
-  op.Do(res);
+  WarpAffineImageOperator* op = new WarpAffineImageOperator(orig, angle);
+  op->Do(&res);
+
+  palm.SetCurHandleRes(res);
+  palm.SetImageOperator(std::unique_ptr<WarpAffineImageOperator>(op));
   return Status::Ok();
 }
 
