@@ -7,8 +7,12 @@
 
 namespace rpr {
 
-Status GaussianFilter::Blur(const cv::Mat& orig, cv::Mat* res) {
-  cv::GaussianBlur(orig, *res, cv::Size(5, 5), 0, 0, cv::BORDER_DEFAULT);
+Status GaussianFilter::Blur(PalmInfoDTO& palm) {
+  cv::Mat res;
+
+  cv::GaussianBlur(palm.PrevHandleRes(), res, cv::Size(5, 5), 0);
+
+  palm.SetCurHandleRes(res);
   return Status::Ok();
 }
 

@@ -19,12 +19,11 @@ class BinarizerTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(BinarizerTestFixture, test_otsu_binarizer) {
-  Mat invalid_palm;
   OtsuBinarizer binarizer;
-  auto status = binarizer.Handle(invalid_palm, &invalid_palm);
+  auto status = binarizer.Handle(invalid_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  status = binarizer.Handle(complex_env_palm_, &complex_env_palm_);
+  status = binarizer.Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

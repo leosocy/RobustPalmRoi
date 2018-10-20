@@ -11,24 +11,24 @@ namespace rpr {
 
 class Enhancer : public Handler {
  public:
-  virtual Status Handle(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Handle(PalmInfoDTO& palm);
 
  protected:
-  virtual Status Enhance(const cv::Mat& orig, cv::Mat* res) = 0;
+  virtual Status Enhance(PalmInfoDTO& palm) = 0;
 };
 
-inline Status Enhancer::Handle(const cv::Mat& orig, cv::Mat* res) {
-  assert (res != NULL);
+inline Status Enhancer::Handle(PalmInfoDTO& palm) {
+  const cv::Mat& orig = palm.PrevHandleRes();
   if (orig.empty() || orig.channels() != 3) {
     return Status::LoadImageError("Original palm image must be colored.");
   }
-  return Enhance(orig, res);
+  return Enhance(palm);
 }
 
 
 class LaplaceEnhancer : public Enhancer {
  private:
-  virtual Status Enhance(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Enhance(PalmInfoDTO& palm);
 };
 
 }   // namespace rpr

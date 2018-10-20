@@ -6,9 +6,14 @@
 
 namespace rpr {
 
-Status LaplaceEnhancer::Enhance(const cv::Mat& orig, cv::Mat* res) {
+Status LaplaceEnhancer::Enhance(PalmInfoDTO& palm) {
+  cv::Mat res;
   cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
-  cv::filter2D(orig, *res, orig.depth(), kernel);
+  const cv::Mat& orig = palm.PrevHandleRes();
+
+  cv::filter2D(orig, res, orig.depth(), kernel);
+
+  palm.SetCurHandleRes(res);
   return Status::Ok();
 }
 

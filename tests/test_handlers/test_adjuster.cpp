@@ -23,25 +23,24 @@ class AdjusterTestFixture : public RobustPalmRoiTestFixtureBase {
 
 TEST_F(AdjusterTestFixture, test_noise_adjuster) {
   NoiseAdjuster adjuster;
-  auto status = adjuster.Handle(perfect_palm_, &perfect_palm_);
+  auto status = adjuster.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
   cv::Mat res;
   OtsuBinarizer binarizer;
-  binarizer.Handle(perfect_palm_, &res);
-  status = adjuster.Handle(res, &res);
+  binarizer.Handle(perfect_palm_);
+  status = adjuster.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 
 TEST_F(AdjusterTestFixture, test_angle_adjuster) {
   AngleAdjuster adjuster;
-  auto status = adjuster.Handle(perfect_palm_, &perfect_palm_);
+  auto status = adjuster.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  cv::Mat res;
   OtsuBinarizer binarizer;
-  binarizer.Handle(perfect_palm_, &res);
-  status = adjuster.Handle(res, &res);
+  binarizer.Handle(perfect_palm_);
+  status = adjuster.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

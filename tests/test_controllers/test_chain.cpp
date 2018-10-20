@@ -8,7 +8,7 @@
 #include "handlers/binarizer.h"
 #include "handlers/adjuster.h"
 #include "handlers/detector.h"
-#include "chain/chain.h"
+#include "controllers/chain.h"
 
 namespace {
 
@@ -40,7 +40,7 @@ TEST_F(HandlerChainTestFixture, test_handler_chain) {
   chain.Join(std::unique_ptr<Handler>(new AngleAdjuster));
   chain.Join(std::unique_ptr<Handler>(new PeakValleyDetector));
   cv::Mat result;
-  auto status = chain.Process(complex_env_palm_, &result);
+  auto status = chain.Process(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

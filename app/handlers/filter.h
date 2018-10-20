@@ -11,24 +11,24 @@ namespace rpr {
 
 class Filter : public Handler {
  public:
-  virtual Status Handle(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Handle(PalmInfoDTO& palm);
 
  protected:
-  virtual Status Blur(const cv::Mat& orig, cv::Mat* res) = 0;
+  virtual Status Blur(PalmInfoDTO& palm) = 0;
 };
 
-inline Status Filter::Handle(const cv::Mat& orig, cv::Mat* res) {
-  assert (res != NULL);
+inline Status Filter::Handle(PalmInfoDTO& palm) {
+  const cv::Mat& orig = palm.PrevHandleRes();
   if (orig.empty() || orig.channels() != 3) {
     return Status::LoadImageError("Original palm image must be colored.");
   }
-  return Blur(orig, res);
+  return Blur(palm);
 }
 
 
 class GaussianFilter : public Filter {
  private:
-  virtual Status Blur(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Blur(PalmInfoDTO& palm);
 };
 
 }   // namespace rpr

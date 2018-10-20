@@ -11,25 +11,25 @@ namespace rpr {
 
 class Binarizer : public Handler {
  public:
-  virtual Status Handle(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Handle(PalmInfoDTO& palm);
 
  protected:
-  virtual Status Binary(const cv::Mat& orig, cv::Mat* res) = 0;
+  virtual Status Binary(PalmInfoDTO& palm) = 0;
 };
 
-inline Status Binarizer::Handle(const cv::Mat& orig, cv::Mat* res) {
-  assert (res != NULL);
+inline Status Binarizer::Handle(PalmInfoDTO& palm) {
+  const cv::Mat& orig = palm.PrevHandleRes();
   if (orig.empty()
       || (orig.channels() != 3 && orig.channels() != 1)) {
     return Status::LoadImageError("Original palm image must be colored or grayscale.");
   }
-  return Binary(orig, res);
+  return Binary(palm);
 }
 
 
 class OtsuBinarizer : public Binarizer {
  private:
-  virtual Status Binary(const cv::Mat& orig, cv::Mat* res);
+  virtual Status Binary(PalmInfoDTO& palm);
 };
 
 }   // namespace rpr
