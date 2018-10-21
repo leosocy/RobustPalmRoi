@@ -14,6 +14,10 @@ void GetCenterOfGravity(const cv::Mat& src, cv::Point* center, bool is_binary) {
   center->y = moment.m01 / moment.m00;
 }
 
+float CalcPointDist(const cv::Point& p1, const cv::Point& p2) {
+  return sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+}
+
 
 WarpAffineImageOperator::WarpAffineImageOperator(const cv::Mat& src, double angle, double scale)
   : ImageOperator(src), angle_(angle), radian_(angle_ / 180.0 * CV_PI), scale_(scale) {
