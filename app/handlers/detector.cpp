@@ -10,7 +10,7 @@ namespace rpr {
 bool Detector::ImageOneContour(PalmInfoDTO& palm) {
   std::vector< std::vector<cv::Point> > contours;
   std::vector<cv::Vec4i> hierarchy;
-  cv::findContours(palm.PrevHandleRes(), contours, hierarchy, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+  cv::findContours(palm.PrevHandleRes(), contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
   if (contours.size() == 1) {
     palm.SetContour(contours[0]);
   }

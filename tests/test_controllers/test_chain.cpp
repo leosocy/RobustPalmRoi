@@ -42,8 +42,9 @@ TEST_F(HandlerChainTestFixture, test_handler_chain) {
   chain.Join(std::unique_ptr<Handler>(new AngleAdjuster));
   chain.Join(std::unique_ptr<Handler>(new PeakValleyDetector));
   chain.Join(std::unique_ptr<Handler>(new EffectiveIncircleExtractor));
-  cv::Mat result;
   auto status = chain.Process(complex_env_palm_);
+  EXPECT_EQ(status.code(), Status::kOk);
+  status = chain.Process(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 
