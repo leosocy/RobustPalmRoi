@@ -30,6 +30,7 @@ class EffectiveIncircleExtractor : public Extractor {
   virtual Status Extract(PalmInfoDTO& palm);
   void ReduceSearchScope(PalmInfoDTO& palm, cv::Rect* rect);
   void CalcEffectiveIncircle(const cv::Mat& dist, const cv::Rect& scope, cv::Point* center, float* radius);
+  void ReflectIncircleOnOrig(PalmInfoDTO& palm, cv::Point* center, float* radius, double* angle);
 };
 
 }   // namespace rpr
