@@ -13,6 +13,7 @@ namespace rpr {
 namespace utility {
 
 void GetCenterOfGravity(const cv::Mat& src, cv::Point* center, bool is_binary = true);
+float CalcPointDist(const cv::Point& p1, const cv::Point& p2);
 
 
 class ImageOperator {

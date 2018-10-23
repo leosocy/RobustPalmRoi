@@ -24,7 +24,6 @@ class PalmInfoDTO {
   void release() {
     handle_results_.clear();
     op_records_.clear();
-    center_.x = center_.y = 0;
     contour_.clear();
     peaks_.clear();
     valleys_.clear();
@@ -38,12 +37,12 @@ class PalmInfoDTO {
   void SetContour(const Points& contour) {
     contour_ = contour;
   }
-  void SetCenter(const cv::Point& center) {
-    center_ = center;
-  }
   void SetPeakValley(const Points& peaks, const Points& valleys) {
     peaks_ = peaks;
     valleys_ = valleys;
+  }
+  void SetRoi(const cv::Mat& roi) {
+    roi_ = roi;
   }
 
   const Points& contour() { return contour_; }
@@ -51,20 +50,25 @@ class PalmInfoDTO {
     return handle_results_.back();
   }
   void ReflectPointsOnOrig(const Points& srcs, Points* dsts) {
-    *dsts = srcs;
+    Points temp = srcs;
     for (auto it = op_records_.rbegin(); it != op_records_.rend(); ++it) {
-      (*it)->ReflectPoints(*dsts, dsts);
+      (*it)->ReflectPoints(temp, dsts);
+      temp = *dsts;
     }
   }
+  const cv::Mat& orig() { return orig_; }
+  const Points& peaks() { return peaks_; }
+  const Points& valleys() { return valleys_; }
+  const cv::Mat& roi() { return roi_; }
 
  private:
   cv::Mat orig_;
   Mats handle_results_;
   std::vector< std::unique_ptr<ImageOperator> > op_records_;
-  cv::Point center_;
   Points contour_;
   Points peaks_;    //  order is from left to right
   Points valleys_;  //  order is from left to right
+  cv::Mat roi_;
 };
 
 }   // namespace rpr
