@@ -23,7 +23,7 @@ class ImageOperator {
   // Calculate points on the operated image corresponds to the coordinates on the original image.
   virtual void ReflectPoints(const std::vector<cv::Point>& srcs, std::vector<cv::Point>* dsts) = 0;
  protected:
-  const cv::Mat& orig_;
+  cv::Mat orig_;
   cv::Size res_size_;
 };
 
@@ -37,6 +37,16 @@ class WarpAffineImageOperator : public ImageOperator {
   double angle_;
   double radian_;
   double scale_;
+};
+
+
+class ResizeImageOperator : public ImageOperator {
+ public:
+  ResizeImageOperator(const cv::Mat& src, const cv::Size& dsize);
+  ResizeImageOperator(const cv::Mat& src, double scale);  // 等比例缩放
+  ResizeImageOperator(const cv::Mat& src, int width);     // 指定宽度等比例缩放
+  virtual void Do(cv::Mat* res);
+  virtual void ReflectPoints(const std::vector<cv::Point>& srcs, std::vector<cv::Point>* dsts);
 };
 
 }   // namespace utility

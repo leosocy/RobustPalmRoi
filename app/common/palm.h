@@ -54,6 +54,7 @@ class PalmInfoDTO {
     for (auto it = op_records_.rbegin(); it != op_records_.rend(); ++it) {
       (*it)->ReflectPoints(temp, dsts);
       temp = *dsts;
+      dsts->clear();
     }
   }
   const cv::Mat& orig() { return orig_; }

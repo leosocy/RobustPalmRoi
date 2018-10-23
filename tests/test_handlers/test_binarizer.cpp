@@ -25,6 +25,12 @@ TEST_F(BinarizerTestFixture, test_otsu_binarizer) {
 
   status = binarizer.Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
+
+  cv::Mat gray;
+  cv::cvtColor(perfect_palm_.PrevHandleRes(), gray, cv::COLOR_BGR2GRAY);
+  perfect_palm_.SetCurHandleRes(gray);
+  status = binarizer.Handle(perfect_palm_);
+  EXPECT_EQ(status.code(), Status::kOk);
 }
 
 }

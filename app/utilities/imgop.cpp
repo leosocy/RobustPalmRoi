@@ -59,6 +59,36 @@ void WarpAffineImageOperator::ReflectPoints(const std::vector<cv::Point>& srcs,
   }
 }
 
+
+ResizeImageOperator::ResizeImageOperator(const cv::Mat& src, const cv::Size& dsize)
+  : ImageOperator(src) {
+  res_size_ = dsize;
+}
+
+ResizeImageOperator::ResizeImageOperator(const cv::Mat& src, double scale)
+  : ImageOperator(src) {
+  res_size_ = cv::Size(src.cols * scale, src.rows * scale);
+}
+
+ResizeImageOperator::ResizeImageOperator(const cv::Mat& src, int width)
+  : ImageOperator(src) {
+  res_size_ = cv::Size(width, src.rows * width / src.cols) ;
+}
+
+void ResizeImageOperator::Do(cv::Mat* res) {
+  cv::resize(orig_, *res, res_size_);
+}
+
+void ResizeImageOperator::ReflectPoints(const std::vector<cv::Point>& srcs,
+                                        std::vector<cv::Point>* dsts) {
+  for (auto p : srcs) {
+    cv::Point dp;
+    dp.x = p.x * (double)orig_.cols / res_size_.width;
+    dp.y = p.y * (double)orig_.rows / res_size_.height;
+    dsts->emplace_back(dp);
+  }
+}
+
 }   // namespace utility
 
 }   // namespace rpr

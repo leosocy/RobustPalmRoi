@@ -12,7 +12,7 @@ Status EffectiveIncircleExtractor::Extract(PalmInfoDTO& palm) {
 
   const cv::Mat& orig = palm.PrevHandleRes();
   cv::Mat dist;
-  cv::distanceTransform(orig, dist, CV_DIST_L2, CV_DIST_MASK_5);
+  cv::distanceTransform(orig, dist, CV_DIST_L2, CV_DIST_MASK_3);
   cv::Rect scope;
   ReduceSearchScope(palm, &scope);
 
@@ -25,10 +25,6 @@ Status EffectiveIncircleExtractor::Extract(PalmInfoDTO& palm) {
                                                    2 * radius, 2 * radius));
   WarpAffineImageOperator* op = new WarpAffineImageOperator(rect_roi, angle);
   op->Do(&rect_roi);
-  std::vector<cv::Mat> mv;
-  cv::split(rect_roi, mv);
-  mv.push_back(cv::Mat::zeros(rect_roi.size(), CV_8UC1));
-  cv::merge(mv, rect_roi);
 
   cv::Mat mask(cv::Mat::zeros(rect_roi.size(), CV_8UC1));
   circle(mask, cv::Point(rect_roi.cols / 2, rect_roi.rows / 2), radius, cv::Scalar(255), CV_FILLED);
