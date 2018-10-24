@@ -29,7 +29,7 @@ using rpr::HandlerChain;
 
 class HandlerChainTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
-  HandlerChainTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
+  HandlerChainTestFixture() : RobustPalmRoiTestFixtureBase(0.1) {}
 };
 
 

@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 #include <opencv2/opencv.hpp>
 #include "common/palm.h"
+#include "utilities/imgop.h"
 
 #define TEST_PALM_DATA_DIR "../tests/palm_data"
 
@@ -18,12 +19,12 @@ class RobustPalmRoiTestFixtureBase : public testing::Test {
  public:
   RobustPalmRoiTestFixtureBase(double scaling = 0.5)
     : scaling_(scaling) {
+  }
+  virtual void SetUp() {
     LoadPalmImage(TEST_PERFECT_PALM_IMAGE, &perfect_palm_);
     LoadPalmImage(TEST_COMPLEX_ENV_PALM_IMAGE, &complex_env_palm_);
     cv::Mat temp;
     invalid_palm_ = rpr::PalmInfoDTO(temp);
-  }
-  virtual void SetUp() {
   }
   virtual void TearDown() {
     perfect_palm_.release();
@@ -32,10 +33,15 @@ class RobustPalmRoiTestFixtureBase : public testing::Test {
 
  protected:
   void LoadPalmImage(const char* filename, rpr::PalmInfoDTO* palm) {
+    using rpr::utility::ResizeImageOperator;
     assert (palm != NULL);
     cv::Mat img = cv::imread(filename);
-    cv::resize(img, img, cv::Size(img.cols * scaling_, img.rows * scaling_));
     *palm = rpr::PalmInfoDTO(img);
+    cv::Mat res;
+    ResizeImageOperator *op = new ResizeImageOperator(palm->PrevHandleRes(), scaling_);
+    op->Do(&res);
+    palm->SetCurHandleRes(res);
+    palm->SetImageOperator(std::unique_ptr<rpr::utility::ImageOperator>(op));
   }
   const double scaling_;
   rpr::PalmInfoDTO invalid_palm_;
