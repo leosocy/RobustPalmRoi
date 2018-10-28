@@ -3,12 +3,15 @@
 // that can be found in the LICENSE file.
 
 #include "handlers/extractor.h"
+#include "handlers/detector.h"
 #include "utilities/imgop.h"
 
 namespace rpr {
 
+using utility::WarpAffineImageOperator;
+
 Status EffectiveIncircleExtractor::Extract(PalmInfoDTO& palm) {
-  using utility::WarpAffineImageOperator;
+  FineAdjustPalmAngle(palm);
 
   const cv::Mat& orig = palm.PrevHandleRes();
   cv::Mat dist;
@@ -26,33 +29,47 @@ Status EffectiveIncircleExtractor::Extract(PalmInfoDTO& palm) {
   WarpAffineImageOperator* op = new WarpAffineImageOperator(rect_roi, angle);
   op->Do(&rect_roi);
 
-  cv::Mat mask(cv::Mat::zeros(rect_roi.size(), CV_8UC1));
-  circle(mask, cv::Point(rect_roi.cols / 2, rect_roi.rows / 2), radius, cv::Scalar(255), CV_FILLED);
-  cv::Mat mask_roi;
-  rect_roi.copyTo(mask_roi, mask);
-
-  palm.SetRoi(cv::Mat(mask_roi, cv::Rect(rect_roi.cols / 2 - radius, rect_roi.rows / 2 - radius,
+  palm.SetRoi(cv::Mat(rect_roi, cv::Rect(rect_roi.cols / 2 - radius, rect_roi.rows / 2 - radius,
                                          2 * radius, 2 * radius)));
   return Status::Ok();
 }
 
+void EffectiveIncircleExtractor::FineAdjustPalmAngle(PalmInfoDTO& palm) {
+  cv::Point left_valley = palm.valleys().at(1);
+  cv::Point right_valley = palm.valleys().at(2);
+  cv::Point sub(right_valley.x - left_valley.x, left_valley.y - right_valley.y);
+  double angle = acos(sub.x / sqrt(sub.x * sub.x + sub.y * sub.y)) / CV_PI * 180.0;
+  if (sub.y > 0) {
+    angle *= -1;
+  }
+  cv::Mat res;
+  WarpAffineImageOperator* op = new WarpAffineImageOperator(palm.PrevHandleRes(), angle);
+  op->Do(&res);
+  palm.SetImageOperator(std::unique_ptr<utility::ImageOperator>(op));
+  palm.SetCurHandleRes(res);
+
+  PeakValleyDetector detector;  // 重新计算指尖谷底
+  detector.Handle(palm);
+}
+
 void EffectiveIncircleExtractor::ReduceSearchScope(PalmInfoDTO& palm, cv::Rect* rect) {
+  cv::Point left_valley = palm.valleys().at(1);
   cv::Point farleft_peak = palm.peaks().front();
   cv::Point farright_peak = palm.peaks().back();
   cv::Point middle_finger_peak = palm.peaks().at(2);
   rect->x = farleft_peak.x;
-  rect->y = middle_finger_peak.y;
+  rect->y = left_valley.y;
   rect->width = farright_peak.x - farleft_peak.x;
-  rect->height = palm.valleys().front().y - middle_finger_peak.y;
+  rect->height = palm.valleys().front().y - left_valley.y;
 }
 
 void EffectiveIncircleExtractor::CalcEffectiveIncircle(
-  const cv::Mat& dist, const cv::Rect& scope, cv::Point* center, float* radius) {
+    const cv::Mat& dist, const cv::Rect& scope, cv::Point* center, float* radius) {
   assert (center != NULL && radius != NULL);
   int scope_x = scope.x;
   int scope_y = scope.y;
   for (int h = 0; h < scope.height; ++h) {
-    const float *values = dist.ptr<float>(scope_y + h);
+    const float* values = dist.ptr<float>(scope_y + h);
     for (int w = 0; w < scope.width; ++w) {
       float value = *(values + w + scope_x);
       if (value > *radius) {
@@ -65,7 +82,7 @@ void EffectiveIncircleExtractor::CalcEffectiveIncircle(
 }
 
 void EffectiveIncircleExtractor::ReflectIncircleOnOrig(
-  PalmInfoDTO& palm, cv::Point* center, float* radius, double* angle) {
+    PalmInfoDTO& palm, cv::Point* center, float* radius, double* angle) {
   using utility::CalcPointDist;
 
   cv::Point base(center->x, center->y - *radius);

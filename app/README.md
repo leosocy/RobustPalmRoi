@@ -35,7 +35,7 @@ HandlerChain:
       parameters:
         scaling:
           value: 0.1
-          description: 原图缩放比例，可以加快chain处理速度
+          description: 原图缩放比例，可以加快chain处理速度。
         width:
           value: 256
           description: 按固定宽度等比例缩放，如果同时设置了scaling，则以此参数为准
@@ -54,7 +54,7 @@ HandlerChain:
       parameters:
         width:
           value: 512
-          description: ROI尺寸统一
+          description: ROI尺寸统一。设为0表示不缩放。
 ```
 
 ### Chain Builder

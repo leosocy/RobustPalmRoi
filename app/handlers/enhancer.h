@@ -11,7 +11,7 @@ namespace rpr {
 
 class Enhancer : public Handler {
  public:
-  virtual Status Handle(PalmInfoDTO& palm);
+  Status Handle(PalmInfoDTO& palm) override;
 
  protected:
   virtual Status Enhance(PalmInfoDTO& palm) = 0;
@@ -28,7 +28,7 @@ inline Status Enhancer::Handle(PalmInfoDTO& palm) {
 
 class LaplaceEnhancer : public Enhancer {
  private:
-  virtual Status Enhance(PalmInfoDTO& palm);
+  Status Enhance(PalmInfoDTO& palm) override;
 };
 
 }   // namespace rpr

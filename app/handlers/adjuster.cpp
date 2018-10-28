@@ -13,7 +13,7 @@ Status NoiseAdjuster::Adjust(PalmInfoDTO& palm) {
 
   SmoothBoundary(orig, &res);
 
-  std::vector< std::vector<cv::Point> > contours;
+  std::vector<Points> contours;
   std::vector<cv::Vec4i> hierarchy;
   cv::findContours(res, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
   int palm_index = FindMaxContourAreaIndex(contours, hierarchy);
@@ -31,7 +31,7 @@ void NoiseAdjuster::SmoothBoundary(const cv::Mat& src, cv::Mat* dst) {
   cv::morphologyEx(src, *dst, cv::MORPH_ELLIPSE, element);
 }
 
-int NoiseAdjuster::FindMaxContourAreaIndex(const std::vector< std::vector<cv::Point> >& contours,
+int NoiseAdjuster::FindMaxContourAreaIndex(const std::vector<Points>& contours,
                                            const std::vector<cv::Vec4i>& hierarchy) {
   double max_con_area = 0.0;
   int max_con_index = 0;

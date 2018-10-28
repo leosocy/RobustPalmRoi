@@ -38,7 +38,7 @@ class RobustPalmRoiTestFixtureBase : public testing::Test {
     cv::Mat img = cv::imread(filename);
     *palm = rpr::PalmInfoDTO(img);
     cv::Mat res;
-    ResizeImageOperator *op = new ResizeImageOperator(palm->PrevHandleRes(), scaling_);
+    ResizeImageOperator *op = new ResizeImageOperator(palm->PrevHandleRes(), scaling_ * palm->PrevHandleRes().cols);
     op->Do(&res);
     palm->SetCurHandleRes(res);
     palm->SetImageOperator(std::unique_ptr<rpr::utility::ImageOperator>(op));

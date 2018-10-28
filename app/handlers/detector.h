@@ -13,7 +13,8 @@ namespace rpr {
 
 class Detector : public Handler {
  public:
-  virtual Status Handle(PalmInfoDTO& palm);
+  Status Handle(PalmInfoDTO& palm) override;
+
  protected:
   bool ImageOneContour(PalmInfoDTO& palm);
   virtual Status Detect(PalmInfoDTO& palm) = 0;
@@ -35,7 +36,7 @@ class PeakValleyDetector : public Detector {
     RIGHT = -1
   };
 
-  virtual Status Detect(PalmInfoDTO& palm);
+  Status Detect(PalmInfoDTO& palm) override;
   void FindHalfSideInflectionPoints(const Points& contour, PalmSide side, Points& peaks, Points& valleys);
   size_t FindNextInflectionPoint(const Points& contour, size_t from_index, size_t to_index, int step, bool is_maximum);
 };

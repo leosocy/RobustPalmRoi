@@ -12,7 +12,8 @@ namespace rpr {
 
 class Extractor : public Handler {
  public:
-  virtual Status Handle(PalmInfoDTO& palm);
+  Status Handle(PalmInfoDTO& palm) override;
+
  protected:
   virtual Status Extract(PalmInfoDTO& palm) = 0;
 };
@@ -27,7 +28,8 @@ inline Status Extractor::Handle(PalmInfoDTO& palm) {
 
 class EffectiveIncircleExtractor : public Extractor {
  private:
-  virtual Status Extract(PalmInfoDTO& palm);
+  Status Extract(PalmInfoDTO& palm) override;
+  void FineAdjustPalmAngle(PalmInfoDTO& palm);
   void ReduceSearchScope(PalmInfoDTO& palm, cv::Rect* rect);
   void CalcEffectiveIncircle(const cv::Mat& dist, const cv::Rect& scope, cv::Point* center, float* radius);
   void ReflectIncircleOnOrig(PalmInfoDTO& palm, cv::Point* center, float* radius, double* angle);
