@@ -29,7 +29,6 @@ inline Status Extractor::Handle(PalmInfoDTO& palm) {
 class EffectiveIncircleExtractor : public Extractor {
  private:
   Status Extract(PalmInfoDTO& palm) override;
-  void FineAdjustPalmAngle(PalmInfoDTO& palm);
   void ReduceSearchScope(PalmInfoDTO& palm, cv::Rect* rect);
   void CalcEffectiveIncircle(const cv::Mat& dist, const cv::Rect& scope, cv::Point* center, float* radius);
   void ReflectIncircleOnOrig(PalmInfoDTO& palm, cv::Point* center, float* radius, double* angle);

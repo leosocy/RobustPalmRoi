@@ -41,6 +41,9 @@ class PalmInfoDTO {
     peaks_ = peaks;
     valleys_ = valleys;
   }
+  void SetRoiAngle(double angle) {
+    roi_angle_ = angle;
+  }
   void SetRoi(const cv::Mat& roi) {
     roi_ = roi;
   }
@@ -60,6 +63,7 @@ class PalmInfoDTO {
   const cv::Mat& orig() { return orig_; }
   const Points& peaks() { return peaks_; }
   const Points& valleys() { return valleys_; }
+  double roi_angle() { return roi_angle_; }
   const cv::Mat& roi() { return roi_; }
 
  private:
@@ -69,6 +73,7 @@ class PalmInfoDTO {
   Points contour_;
   Points peaks_;    //  order is from left to right
   Points valleys_;  //  order is from left to right
+  double roi_angle_;
   cv::Mat roi_;
 };
 

@@ -6,12 +6,13 @@
 #define ROBUST_PALM_ROI_APP_HANDLERS_NORMALIZER_H_
 
 #include "handlers/handler.h"
+#include "utilities/imgop.h"
 
 namespace rpr {
 
 class OrigNormalizer : public Handler {
  public:
-  OrigNormalizer() : scaling_(0.2), width_(0) {}
+  OrigNormalizer() : scaling_(0.0), width_(350) {}
 
   Status Handle(PalmInfoDTO& palm) override;
 
@@ -23,7 +24,7 @@ class OrigNormalizer : public Handler {
 
 class RoiNormalizer : public Handler {
  public:
-  RoiNormalizer() : width_(512) {}
+  RoiNormalizer() : width_(256) {}
 
   Status Handle(PalmInfoDTO& palm) override;
 
@@ -33,10 +34,22 @@ class RoiNormalizer : public Handler {
 };
 
 inline Status RoiNormalizer::Handle(PalmInfoDTO& palm) {
-  const cv::Mat& roi = palm.roi();
-  if (roi.empty() || roi.channels() != 3) {
+  using utility::WarpAffineImageOperator;
+  using utility::ResizeImageOperator;
+
+  if (palm.roi().empty() || palm.roi().channels() != 3) {
     return Status::LoadImageError("Roi of must be extracted from original palm image.");
   }
+
+  cv::Mat roi(palm.roi());
+  ResizeImageOperator rop(roi, width_);
+  rop.Do(&roi);
+  int radius = roi.cols / 2;
+  WarpAffineImageOperator* wop = new WarpAffineImageOperator(roi, palm.roi_angle());
+  wop->Do(&roi);
+
+  palm.SetRoi(cv::Mat(roi, cv::Rect(roi.cols / 2 - radius, roi.rows / 2 - radius,
+                                    2 * radius, 2 * radius)));
   return Normalize(palm);
 }
 
@@ -44,6 +57,8 @@ inline Status RoiNormalizer::Handle(PalmInfoDTO& palm) {
 class IncircleRoiNormalizer : public RoiNormalizer {
  private:
   Status Normalize(PalmInfoDTO& palm) override;
+  void MaskIncircle(const cv::Mat& src, cv::Mat* dst);
+  void ColorBalance(const cv::Mat& src, cv::Mat* dst);
 };
 
 }   // namespace rpr
