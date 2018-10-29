@@ -12,7 +12,8 @@ namespace rpr {
 
 class Adjuster : public Handler {
  public:
-  virtual Status Handle(PalmInfoDTO& palm);
+  Status Handle(PalmInfoDTO& palm) override;
+
  protected:
   virtual Status Adjust(PalmInfoDTO& palm) = 0;
 };
@@ -28,7 +29,7 @@ inline Status Adjuster::Handle(PalmInfoDTO& palm) {
 
 class NoiseAdjuster : public Adjuster {
  private:
-  virtual Status Adjust(PalmInfoDTO& palm);
+  Status Adjust(PalmInfoDTO& palm) override;
   void SmoothBoundary(const cv::Mat& src, cv::Mat* dst);
   int FindMaxContourAreaIndex(const std::vector< std::vector<cv::Point> >& contours,
                               const std::vector<cv::Vec4i>& hierarchy);
@@ -37,7 +38,7 @@ class NoiseAdjuster : public Adjuster {
 
 class AngleAdjuster : public Adjuster {
  private:
-  virtual Status Adjust(PalmInfoDTO& palm);
+  Status Adjust(PalmInfoDTO& palm) override;
   void ErodeFinger(const cv::Mat& src, cv::Mat* dst);
 };
 

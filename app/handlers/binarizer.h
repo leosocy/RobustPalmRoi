@@ -11,7 +11,7 @@ namespace rpr {
 
 class Binarizer : public Handler {
  public:
-  virtual Status Handle(PalmInfoDTO& palm);
+  Status Handle(PalmInfoDTO& palm) override;
 
  protected:
   virtual Status Binary(PalmInfoDTO& palm) = 0;
@@ -29,7 +29,7 @@ inline Status Binarizer::Handle(PalmInfoDTO& palm) {
 
 class OtsuBinarizer : public Binarizer {
  private:
-  virtual Status Binary(PalmInfoDTO& palm);
+  Status Binary(PalmInfoDTO& palm) override;
 };
 
 }   // namespace rpr

@@ -20,7 +20,7 @@ float CalcPointDist(const cv::Point& p1, const cv::Point& p2) {
 
 
 WarpAffineImageOperator::WarpAffineImageOperator(const cv::Mat& src, double angle, double scale)
-  : ImageOperator(src), angle_(angle), radian_(angle_ / 180.0 * CV_PI), scale_(scale) {
+    : ImageOperator(src), angle_(angle), radian_(angle_ / 180.0 * CV_PI), scale_(scale) {
 }
 
 void WarpAffineImageOperator::Do(cv::Mat* res) {
@@ -61,17 +61,12 @@ void WarpAffineImageOperator::ReflectPoints(const std::vector<cv::Point>& srcs,
 
 
 ResizeImageOperator::ResizeImageOperator(const cv::Mat& src, const cv::Size& dsize)
-  : ImageOperator(src) {
+    : ImageOperator(src) {
   res_size_ = dsize;
 }
 
-ResizeImageOperator::ResizeImageOperator(const cv::Mat& src, double scale)
-  : ImageOperator(src) {
-  res_size_ = cv::Size(src.cols * scale, src.rows * scale);
-}
-
 ResizeImageOperator::ResizeImageOperator(const cv::Mat& src, int width)
-  : ImageOperator(src) {
+    : ImageOperator(src) {
   res_size_ = cv::Size(width, src.rows * width / src.cols) ;
 }
 

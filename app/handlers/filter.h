@@ -11,7 +11,7 @@ namespace rpr {
 
 class Filter : public Handler {
  public:
-  virtual Status Handle(PalmInfoDTO& palm);
+  Status Handle(PalmInfoDTO& palm) override;
 
  protected:
   virtual Status Blur(PalmInfoDTO& palm) = 0;
@@ -28,7 +28,7 @@ inline Status Filter::Handle(PalmInfoDTO& palm) {
 
 class GaussianFilter : public Filter {
  private:
-  virtual Status Blur(PalmInfoDTO& palm);
+  Status Blur(PalmInfoDTO& palm) override;
 };
 
 }   // namespace rpr

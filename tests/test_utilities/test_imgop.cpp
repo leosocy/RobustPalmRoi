@@ -40,12 +40,8 @@ TEST_F(ImageOperateTestFixture, test_resize_image_operator_do) {
   op1.Do(&res);
   EXPECT_EQ(res.size(), cv::Size(100, 200));
 
-  ResizeImageOperator op2(perfect_palm_.PrevHandleRes(), 0.5);
+  ResizeImageOperator op2(perfect_palm_.PrevHandleRes(), 256);
   op2.Do(&res);
-  EXPECT_EQ(res.size(), cv::Size(perfect_palm_.PrevHandleRes().cols * 0.5, perfect_palm_.PrevHandleRes().rows * 0.5));
-
-  ResizeImageOperator op3(perfect_palm_.PrevHandleRes(), 256);
-  op3.Do(&res);
   EXPECT_EQ(res.size(), cv::Size(256, perfect_palm_.PrevHandleRes().rows * 256 / perfect_palm_.PrevHandleRes().cols));
 }
 
