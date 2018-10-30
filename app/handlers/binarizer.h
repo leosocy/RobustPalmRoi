@@ -28,6 +28,10 @@ inline Status Binarizer::Handle(PalmInfoDTO& palm) {
 
 
 class OtsuBinarizer : public Binarizer {
+ public:
+  OtsuBinarizer();
+  Status Init() override;
+
  private:
   Status Binary(PalmInfoDTO& palm) override;
 };

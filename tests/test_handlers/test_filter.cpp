@@ -10,7 +10,7 @@ namespace {
 using cv::Mat;
 
 using rpr::Status;
-using rpr::GaussianFilter;
+using rpr::HandlerFactory;
 
 class FilterTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
@@ -19,11 +19,11 @@ class FilterTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(FilterTestFixture, test_gaussian_filter) {
-  GaussianFilter filter;
-  auto status = filter.Handle(invalid_palm_);
+  auto filter = HandlerFactory::instance().GetHandler("GaussianFilter");
+  auto status = filter->Handle(invalid_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  status = filter.Handle(complex_env_palm_);
+  status = filter->Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

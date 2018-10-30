@@ -27,6 +27,10 @@ inline Status Extractor::Handle(PalmInfoDTO& palm) {
 
 
 class EffectiveIncircleExtractor : public Extractor {
+ public:
+  EffectiveIncircleExtractor();
+  Status Init() override;
+
  private:
   Status Extract(PalmInfoDTO& palm) override;
   void ReduceSearchScope(PalmInfoDTO& palm, cv::Rect* rect);

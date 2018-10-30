@@ -28,6 +28,10 @@ inline Status Adjuster::Handle(PalmInfoDTO& palm) {
 
 
 class NoiseAdjuster : public Adjuster {
+ public:
+  NoiseAdjuster();
+  Status Init() override;
+
  private:
   Status Adjust(PalmInfoDTO& palm) override;
   void SmoothBoundary(const cv::Mat& src, cv::Mat* dst);
@@ -37,6 +41,10 @@ class NoiseAdjuster : public Adjuster {
 
 
 class AngleAdjuster : public Adjuster {
+ public:
+  AngleAdjuster();
+  Status Init() override;
+
  private:
   Status Adjust(PalmInfoDTO& palm) override;
   void ErodeFinger(const cv::Mat& src, cv::Mat* dst);

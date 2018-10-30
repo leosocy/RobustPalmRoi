@@ -7,6 +7,11 @@
 
 namespace rpr {
 
+REGISTER_HANDLER(GaussianFilter);
+
+Status GaussianFilter::Init() {
+}
+
 Status GaussianFilter::Blur(PalmInfoDTO& palm) {
   cv::Mat res;
 

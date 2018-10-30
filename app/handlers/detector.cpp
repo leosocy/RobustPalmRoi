@@ -18,6 +18,11 @@ bool Detector::ImageOneContour(PalmInfoDTO& palm) {
 }
 
 
+REGISTER_HANDLER(PeakValleyDetector);
+
+Status PeakValleyDetector::Init() {
+}
+
 Status PeakValleyDetector::Detect(PalmInfoDTO& palm) {
   Points peaks, valleys;
   const Points& contour = palm.contour();

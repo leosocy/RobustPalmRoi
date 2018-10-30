@@ -6,6 +6,11 @@
 
 namespace rpr {
 
+REGISTER_HANDLER(LaplaceEnhancer);
+
+Status LaplaceEnhancer::Init() {
+}
+
 Status LaplaceEnhancer::Enhance(PalmInfoDTO& palm) {
   cv::Mat res;
   cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);

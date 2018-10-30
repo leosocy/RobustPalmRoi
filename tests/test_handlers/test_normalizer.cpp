@@ -21,12 +21,14 @@ class NormalizerTestFixture : public RobustPalmRoiTestFixtureBase {
 
 TEST_F(NormalizerTestFixture, test_orig_normalizer) {
   OrigNormalizer normalizer;
+  normalizer.Init();
   auto status = normalizer.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 
 TEST_F(NormalizerTestFixture, test_incircle_roi_normalizer) {
   IncircleRoiNormalizer normalizer;
+  normalizer.Init();
   auto status = normalizer.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 }
