@@ -28,5 +28,4 @@ REGISTER_HANDLER(IncircleRoiNormalizer);
 
 }   // namespace rpr
 
-
 #endif  // ROBUST_PALM_ROI_APP_HANDLERS_REGISTRY_H_
