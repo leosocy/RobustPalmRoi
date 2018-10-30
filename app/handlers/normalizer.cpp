@@ -6,9 +6,6 @@
 
 namespace rpr {
 
-REGISTER_HANDLER(OrigNormalizer);
-REGISTER_HANDLER(IncircleRoiNormalizer);
-
 Status OrigNormalizer::Init() {
   scaling_= 0.0;
   width_ = 350;

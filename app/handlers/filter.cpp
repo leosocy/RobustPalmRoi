@@ -7,8 +7,6 @@
 
 namespace rpr {
 
-REGISTER_HANDLER(GaussianFilter);
-
 Status GaussianFilter::Init() {
 }
 

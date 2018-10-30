@@ -4,6 +4,7 @@
 
 #include "controllers/chain.h"
 #include <ctime>
+#include "handlers/registry.h"
 
 namespace rpr {
 

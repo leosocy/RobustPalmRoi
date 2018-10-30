@@ -6,8 +6,6 @@
 
 namespace rpr {
 
-REGISTER_HANDLER(OtsuBinarizer);
-
 Status OtsuBinarizer::Init() {
 }
 

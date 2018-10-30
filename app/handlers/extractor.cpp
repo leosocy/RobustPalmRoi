@@ -8,8 +8,6 @@
 
 namespace rpr {
 
-REGISTER_HANDLER(EffectiveIncircleExtractor);
-
 Status EffectiveIncircleExtractor::Init() {
 }
 

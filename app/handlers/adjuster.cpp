@@ -7,9 +7,6 @@
 
 namespace rpr {
 
-REGISTER_HANDLER(NoiseAdjuster);
-REGISTER_HANDLER(AngleAdjuster);
-
 Status NoiseAdjuster::Init() {
 }
 

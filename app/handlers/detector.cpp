@@ -18,8 +18,6 @@ bool Detector::ImageOneContour(PalmInfoDTO& palm) {
 }
 
 
-REGISTER_HANDLER(PeakValleyDetector);
-
 Status PeakValleyDetector::Init() {
 }
 
