@@ -19,7 +19,6 @@ float CalcPointDist(const cv::Point& p1, const cv::Point& p2);
 class ImageOperator {
  public:
   ImageOperator(const cv::Mat& src) : orig_(src) {}
-
   virtual void Do(cv::Mat* res) = 0;
   // Calculate points on the operated image corresponds to the coordinates on the original image.
   virtual void ReflectPoints(const std::vector<cv::Point>& srcs, std::vector<cv::Point>* dsts) = 0;
@@ -33,7 +32,6 @@ class ImageOperator {
 class WarpAffineImageOperator : public ImageOperator {
  public:
   WarpAffineImageOperator(const cv::Mat& src, double angle = 0.0, double scale = 1.0);
-
   void Do(cv::Mat* res) override;
   void ReflectPoints(const std::vector<cv::Point>& srcs, std::vector<cv::Point>* dsts) override;
 
@@ -48,7 +46,6 @@ class ResizeImageOperator : public ImageOperator {
  public:
   ResizeImageOperator(const cv::Mat& src, const cv::Size& dsize);
   ResizeImageOperator(const cv::Mat& src, int width);     // 指定宽度等比例缩放
-
   void Do(cv::Mat* res) override;
   void ReflectPoints(const std::vector<cv::Point>& srcs, std::vector<cv::Point>* dsts) override;
 };

@@ -22,11 +22,11 @@
                                                       \--> Adjuster /
                                                        \-----------/
 
-所有Handler通过读取配置文件(yaml/json)，形成处理链。输入原始的`PalmInfoDTO`，输出经过链处理后的`PalmInfoDTO`。
+所有Handler通过读取配置文件(yaml)，形成处理链。输入原始的`PalmInfoDTO`，输出经过链处理后的`PalmInfoDTO`。
 
 ### Config Manager
 
-负责读取yaml/json配置文件
+负责读取yaml配置文件
 
 ```yaml
 HandlerChain:
@@ -60,9 +60,8 @@ HandlerChain:
 ### Chain Builder
 
 builder.SetConfig()
-builder.BuildChain()
+builder.BuildAndInitChain()
 
 ## Apis
 
-- GetPalmRoi(const cv::Mat& palm, int roi_size);
-- GetPalmRoiAsync(const cv::Mat& palm, int roi_size, )
+- GetPalmRoi(const cv::Mat& palm, cv::Mat* roi);

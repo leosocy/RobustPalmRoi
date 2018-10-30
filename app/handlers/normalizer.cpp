@@ -6,6 +6,11 @@
 
 namespace rpr {
 
+Status OrigNormalizer::Init() {
+  scaling_= 0.0;
+  width_ = 350;
+}
+
 Status OrigNormalizer::Handle(PalmInfoDTO& palm) {
   using utility::ResizeImageOperator;
 
@@ -19,6 +24,10 @@ Status OrigNormalizer::Handle(PalmInfoDTO& palm) {
   return Status::Ok();
 }
 
+
+Status IncircleRoiNormalizer::Init() {
+  width_ = 256;
+}
 
 Status IncircleRoiNormalizer::Normalize(PalmInfoDTO& palm) {
   const cv::Mat& roi(palm.roi());

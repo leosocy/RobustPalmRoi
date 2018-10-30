@@ -30,6 +30,10 @@ inline Status Detector::Handle(PalmInfoDTO& palm) {
 
 
 class PeakValleyDetector : public Detector {
+ public:
+  PeakValleyDetector();
+  Status Init() override;
+
  private:
   enum PalmSide {
     LEFT = 1,

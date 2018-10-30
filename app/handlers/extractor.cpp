@@ -8,6 +8,9 @@
 
 namespace rpr {
 
+Status EffectiveIncircleExtractor::Init() {
+}
+
 Status EffectiveIncircleExtractor::Extract(PalmInfoDTO& palm) {
   const cv::Mat& orig = palm.PrevHandleRes();
   cv::Mat dist;

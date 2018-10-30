@@ -15,10 +15,19 @@ namespace rpr {
 
 class HandlerChain {
  public:
-  HandlerChain& Join(std::unique_ptr<Handler> handler);
   Status Process(PalmInfoDTO& palm);
+
  private:
-  std::list< std::unique_ptr<Handler> > handlers_;
+  friend class ChainBuilder;
+  HandlerChain& Join(std::shared_ptr<Handler> handler);
+
+  std::list< std::shared_ptr<Handler> > handlers_;
+};
+
+
+class ChainBuilder {
+ public:
+  std::unique_ptr<HandlerChain> BuildAndInitChain();
 };
 
 }   // namespace rpr

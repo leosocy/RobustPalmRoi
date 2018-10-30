@@ -7,6 +7,9 @@
 
 namespace rpr {
 
+Status NoiseAdjuster::Init() {
+}
+
 Status NoiseAdjuster::Adjust(PalmInfoDTO& palm) {
   const cv::Mat& orig = palm.PrevHandleRes();
   cv::Mat res;
@@ -45,6 +48,9 @@ int NoiseAdjuster::FindMaxContourAreaIndex(const std::vector<Points>& contours,
   return max_con_index;
 }
 
+
+Status AngleAdjuster::Init() {
+}
 
 Status AngleAdjuster::Adjust(PalmInfoDTO& palm) {
   using utility::GetCenterOfGravity;

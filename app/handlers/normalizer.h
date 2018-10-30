@@ -12,8 +12,8 @@ namespace rpr {
 
 class OrigNormalizer : public Handler {
  public:
-  OrigNormalizer() : scaling_(0.0), width_(350) {}
-
+  OrigNormalizer();
+  Status Init() override;
   Status Handle(PalmInfoDTO& palm) override;
 
  private:
@@ -24,12 +24,11 @@ class OrigNormalizer : public Handler {
 
 class RoiNormalizer : public Handler {
  public:
-  RoiNormalizer() : width_(256) {}
-
   Status Handle(PalmInfoDTO& palm) override;
 
  protected:
   virtual Status Normalize(PalmInfoDTO& palm) = 0;
+
   int width_;
 };
 
@@ -55,6 +54,10 @@ inline Status RoiNormalizer::Handle(PalmInfoDTO& palm) {
 
 
 class IncircleRoiNormalizer : public RoiNormalizer {
+ public:
+  IncircleRoiNormalizer();
+  Status Init() override;
+
  private:
   Status Normalize(PalmInfoDTO& palm) override;
   void MaskIncircle(const cv::Mat& src, cv::Mat* dst);
