@@ -28,7 +28,6 @@ inline Status Filter::Handle(PalmInfoDTO& palm) {
 class GaussianFilter : public Filter {
  public:
   GaussianFilter();
-  Status Init() override;
 
  private:
   Status Blur(PalmInfoDTO& palm) override;

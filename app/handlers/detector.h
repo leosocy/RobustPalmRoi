@@ -32,7 +32,7 @@ inline Status Detector::Handle(PalmInfoDTO& palm) {
 class PeakValleyDetector : public Detector {
  public:
   PeakValleyDetector();
-  Status Init() override;
+  Status Init(const YAML::Node& parameters) override;
 
  private:
   enum PalmSide {
@@ -43,6 +43,8 @@ class PeakValleyDetector : public Detector {
   Status Detect(PalmInfoDTO& palm) override;
   void FindHalfSideInflectionPoints(const Points& contour, PalmSide side, Points& peaks, Points& valleys);
   size_t FindNextInflectionPoint(const Points& contour, size_t from_index, size_t to_index, int step, bool is_maximum);
+
+  int step_;
 };
 
 }   // namespace rpr

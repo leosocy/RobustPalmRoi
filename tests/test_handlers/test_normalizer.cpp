@@ -2,6 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
+#include <yaml-cpp/yaml.h>
 #include "test_base.h"
 #include "handlers/normalizer.h"
 
@@ -21,15 +22,19 @@ class NormalizerTestFixture : public RobustPalmRoiTestFixtureBase {
 
 TEST_F(NormalizerTestFixture, test_orig_normalizer) {
   OrigNormalizer normalizer;
-  normalizer.Init();
-  auto status = normalizer.Handle(perfect_palm_);
+  auto status = normalizer.Init(YAML::Load("{scaling: 0.1, width: 666}"));
+  EXPECT_EQ(status.code(), Status::kLoadConfigYamlError);
+  status = normalizer.Init(YAML::Load("{scaling: {value: 0.1}, width: {value: 666}}"));
   EXPECT_EQ(status.code(), Status::kOk);
+  status = normalizer.Handle(perfect_palm_);
+  EXPECT_EQ(status.code(), Status::kOk);
+  EXPECT_EQ(perfect_palm_.PrevHandleRes().cols, 666);
 }
 
 TEST_F(NormalizerTestFixture, test_incircle_roi_normalizer) {
   IncircleRoiNormalizer normalizer;
-  normalizer.Init();
-  auto status = normalizer.Handle(perfect_palm_);
+  auto status = normalizer.Init(YAML::Load("{width: {value: 100}}"));
+  status = normalizer.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 }
 

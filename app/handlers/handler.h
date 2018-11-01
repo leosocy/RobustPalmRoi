@@ -7,6 +7,7 @@
 
 #include <map>
 #include <opencv2/opencv.hpp>
+#include <yaml-cpp/yaml.h>
 #include "common/status.h"
 #include "common/palm.h"
 
@@ -16,7 +17,7 @@ namespace rpr {
 class Handler {
  public:
   virtual Status Handle(PalmInfoDTO& palm) = 0;
-  virtual Status Init() = 0;
+  virtual Status Init(const YAML::Node& parameters) { return Status::Ok(); }
 };
 
 
@@ -31,9 +32,6 @@ class HandlerFactory {
   }
   std::shared_ptr<Handler> GetHandler(const std::string& name) {
     return handlers_.at(name);
-  }
-  const std::map<std::string, std::shared_ptr<Handler> >& handers() {
-    return handlers_;
   }
 
  private:

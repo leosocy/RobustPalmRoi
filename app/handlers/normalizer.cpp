@@ -6,9 +6,17 @@
 
 namespace rpr {
 
-Status OrigNormalizer::Init() {
-  scaling_= 0.0;
-  width_ = 350;
+Status OrigNormalizer::Init(const YAML::Node& parameters) {
+  try {
+    scaling_= parameters["scaling"].IsNull() ? 0.0 : parameters["scaling"]["value"].as<double>();
+    width_ = parameters["width"].IsNull() ? 350 : parameters["width"]["value"].as<int>();
+  } catch (const std::exception& e) {
+    return Status::LoadConfigYamlError(e.what());
+  }
+  if (scaling_ <= 0 || scaling_ > 1) {
+    return Status::LoadConfigYamlError("Original image scaling must in range [0.0, 1.0]");
+  }
+  return Status::Ok();
 }
 
 Status OrigNormalizer::Handle(PalmInfoDTO& palm) {
@@ -25,8 +33,13 @@ Status OrigNormalizer::Handle(PalmInfoDTO& palm) {
 }
 
 
-Status IncircleRoiNormalizer::Init() {
-  width_ = 256;
+Status IncircleRoiNormalizer::Init(const YAML::Node& parameters) {
+  try {
+    width_ = parameters["width"].IsNull() ? 256 : parameters["width"]["value"].as<int>();
+  } catch (const std::exception& e) {
+    return Status::LoadConfigYamlError(e.what());
+  }
+  return Status::Ok();
 }
 
 Status IncircleRoiNormalizer::Normalize(PalmInfoDTO& palm) {

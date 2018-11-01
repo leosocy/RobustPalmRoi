@@ -14,6 +14,8 @@
 #define TEST_PERFECT_PALM_IMAGE TEST_PALM_DATA_DIR"/palm_perfect.jpg"
 #define TEST_COMPLEX_ENV_PALM_IMAGE TEST_PALM_DATA_DIR"/palm_complex_env.jpg"
 
+#define TEST_CONFIG_YAML_FILE "../tests/config.yaml"
+
 
 class RobustPalmRoiTestFixtureBase : public testing::Test {
  public:

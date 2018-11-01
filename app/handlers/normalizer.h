@@ -13,7 +13,7 @@ namespace rpr {
 class OrigNormalizer : public Handler {
  public:
   OrigNormalizer();
-  Status Init() override;
+  Status Init(const YAML::Node& parameters) override;
   Status Handle(PalmInfoDTO& palm) override;
 
  private:
@@ -56,7 +56,7 @@ inline Status RoiNormalizer::Handle(PalmInfoDTO& palm) {
 class IncircleRoiNormalizer : public RoiNormalizer {
  public:
   IncircleRoiNormalizer();
-  Status Init() override;
+  Status Init(const YAML::Node& parameters) override;
 
  private:
   Status Normalize(PalmInfoDTO& palm) override;

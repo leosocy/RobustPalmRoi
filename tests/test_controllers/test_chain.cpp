@@ -18,6 +18,7 @@ class ChainTestFixture : public RobustPalmRoiTestFixtureBase {
 
 TEST_F(ChainTestFixture, test_chain_builder) {
   ChainBuilder builder;
+  builder.SetConfigYaml(TEST_CONFIG_YAML_FILE);
   auto chain = builder.BuildAndInitChain();
   EXPECT_NE(chain.get(), nullptr);
 }
@@ -25,6 +26,7 @@ TEST_F(ChainTestFixture, test_chain_builder) {
 
 TEST_F(ChainTestFixture, test_handler_chain) {
   ChainBuilder builder;
+  builder.SetConfigYaml(TEST_CONFIG_YAML_FILE);
   auto chain = builder.BuildAndInitChain();
   auto status = chain->Process(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);

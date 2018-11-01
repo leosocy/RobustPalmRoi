@@ -6,9 +6,6 @@
 
 namespace rpr {
 
-Status OtsuBinarizer::Init() {
-}
-
 Status OtsuBinarizer::Binary(PalmInfoDTO& palm) {
   const cv::Mat& orig = palm.PrevHandleRes();
   cv::Mat res;
