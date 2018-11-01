@@ -8,6 +8,7 @@
 #include <memory>
 #include <list>
 #include <opencv2/opencv.hpp>
+#include <yaml-cpp/yaml.h>
 #include "handlers/handler.h"
 #include "common/status.h"
 
