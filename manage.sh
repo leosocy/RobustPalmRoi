@@ -37,10 +37,10 @@ test() {
     docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -ec """
         mkdir -p test_build; cd test_build; cmake ../tests; make -j2 build_and_test;
         cd ..;
-        lcov -b . -d . -c -o cov.info > /dev/null;
-        lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info;
+        lcov -b . -d test_build -c -o cov.info > /dev/null;
+        lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info -q;
         lcov -l cov.info;
-        genhtml -o cov_result cov.info > /dev/null; rm -rf ../cov_result; mv -f cov_result ..;
+        genhtml -o cov_result cov.info > /dev/null; rm -rf cov_result;
         echo ""
         echo ""
         echo \"==========Generated code coverage report under ./cov_result directory.==========\"
