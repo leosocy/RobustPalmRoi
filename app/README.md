@@ -35,9 +35,11 @@ HandlerChain:
       parameters:
         scaling:
           value: 0.1
-          description: 原图缩放比例，可以加快chain处理速度。
+          default: 1.0
+          description: 原图缩放比例(0.0. 1.0]，可以加快chain处理速度。
         width:
           value: 256
+          default: 350
           description: 按固定宽度等比例缩放，如果同时设置了scaling，则以此参数为准
     - type: LaplaceEnhancer
     - type: GaussianFilter
@@ -48,12 +50,14 @@ HandlerChain:
       parameters:
         step:
           value: 5
+          default: 5
           description: 遍历手掌轮廓的步进。过小会导致陷入局部极值，找不到指尖谷底；过大会导致找到的指尖谷底不准确。建议在5~10之间
     - type: EffectiveIncircleExtractor
     - type: IncircleRoiNormalizer
       parameters:
         width:
           value: 512
+          default: 256
           description: ROI尺寸统一。设为0表示不缩放。
 ```
 

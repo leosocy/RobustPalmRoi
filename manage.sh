@@ -35,7 +35,7 @@ test() {
     fi
     check_exec_success "$?" "pulling ${OPENCV_CI_IMAGE} image"
     docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -ec """
-        mkdir -p test_build; cd test_build; cmake ../tests; make -j build_and_test;
+        mkdir -p test_build; cd test_build; cmake ../tests; make -j2 build_and_test;
         lcov -b . -d . -c -o cov.info > /dev/null;
         lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info -q;
         lcov -l cov.info;
@@ -58,7 +58,7 @@ gdbtest() {
     docker run -it --rm -v ${CurDir}:/app -w /app \
     --cap-add=SYS_PTRACE --security-opt seccomp=unconfined \
     ${OPENCV_CI_IMAGE} /bin/sh -ec """
-        mkdir test_build; cd test_build;
+        mkdir -p test_build; cd test_build;
         cmake ../tests; make -j; gdb ${APP_TEST_NAME}
     """
     check_exec_success "$?" "gdb test"
@@ -83,6 +83,18 @@ test_and_lint() {
     lint
 }
 
+
+runenv() {
+    load_images ${OPENCV_CI_IMAGE}
+    image_exist ${OPENCV_CI_IMAGE}
+    if [ $? -ne 0 ]; then
+        docker pull ${OPENCV_CI_IMAGE} > /dev/null
+    fi
+    check_exec_success "$?" "pulling ${OPENCV_CI_IMAGE} image"
+    docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -ec """
+    sh
+    """
+}
 
 ######## below functions are used for travis-ci ########
 
@@ -132,6 +144,7 @@ case "$1" in
     gdbtest) gdbtest ;;
     lint) lint ;;
     test_and_lint) test_and_lint ;;
+    env) runenv ;;
     upload_codecov) upload_codecov ;;
     save_images) save_images ;;
     load_images) load_images $2 ;;
@@ -140,6 +153,7 @@ case "$1" in
         echo "./manage.sh test | gdbtest"
         echo "./manage.sh lint"
         echo "./manage.sh test_and_lint"
+        echo "./manage.sh env"
         exit 1
         ;;
 esac

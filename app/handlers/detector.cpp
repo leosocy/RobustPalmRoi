@@ -18,7 +18,13 @@ bool Detector::ImageOneContour(PalmInfoDTO& palm) {
 }
 
 
-Status PeakValleyDetector::Init() {
+Status PeakValleyDetector::Init(const YAML::Node& parameters) {
+  try {
+    step_ = parameters["step"].IsNull() ? 5 : parameters["step"]["value"].as<int>();
+  } catch (const std::exception& e) {
+    return Status::LoadConfigYamlError(e.what());
+  }
+  return Status::Ok();
 }
 
 Status PeakValleyDetector::Detect(PalmInfoDTO& palm) {
@@ -53,7 +59,7 @@ Status PeakValleyDetector::Detect(PalmInfoDTO& palm) {
 
 void PeakValleyDetector::FindHalfSideInflectionPoints(const Points& contour, PalmSide side,
                                                       Points& peaks, Points& valleys) {
-  int step = 8 * static_cast<int>(side);
+  int step = step_ * static_cast<int>(side);
   size_t from = (side == PalmSide::LEFT ? 0 : contour.size() - 1);
   size_t to = contour.size() / 2;
   size_t founded = 0;

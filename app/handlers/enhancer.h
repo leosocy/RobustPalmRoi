@@ -29,7 +29,6 @@ inline Status Enhancer::Handle(PalmInfoDTO& palm) {
 class LaplaceEnhancer : public Enhancer {
  public:
   LaplaceEnhancer();
-  Status Init() override;
 
  private:
   Status Enhance(PalmInfoDTO& palm) override;

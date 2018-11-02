@@ -30,7 +30,6 @@ inline Status Adjuster::Handle(PalmInfoDTO& palm) {
 class NoiseAdjuster : public Adjuster {
  public:
   NoiseAdjuster();
-  Status Init() override;
 
  private:
   Status Adjust(PalmInfoDTO& palm) override;
@@ -43,7 +42,6 @@ class NoiseAdjuster : public Adjuster {
 class AngleAdjuster : public Adjuster {
  public:
   AngleAdjuster();
-  Status Init() override;
 
  private:
   Status Adjust(PalmInfoDTO& palm) override;

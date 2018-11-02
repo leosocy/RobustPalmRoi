@@ -8,8 +8,10 @@
 #include <memory>
 #include <list>
 #include <opencv2/opencv.hpp>
+#include <yaml-cpp/yaml.h>
 #include "handlers/handler.h"
 #include "common/status.h"
+#include "controllers/config_manager.h"
 
 namespace rpr {
 
@@ -27,7 +29,11 @@ class HandlerChain {
 
 class ChainBuilder {
  public:
+  ChainBuilder& SetConfigYaml(const std::string& filename);
   std::unique_ptr<HandlerChain> BuildAndInitChain();
+
+ private:
+  std::unique_ptr<YamlConfigManager> config_manager_;
 };
 
 }   // namespace rpr
