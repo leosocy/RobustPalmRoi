@@ -33,7 +33,10 @@ TEST_F(NormalizerTestFixture, test_orig_normalizer) {
 
 TEST_F(NormalizerTestFixture, test_incircle_roi_normalizer) {
   IncircleRoiNormalizer normalizer;
-  auto status = normalizer.Init(YAML::Load("{width: {value: 100}}"));
+  auto status = normalizer.Init(YAML::Load("{width: 100}"));
+  EXPECT_EQ(status.code(), Status::kLoadConfigYamlError);
+  status = normalizer.Init(YAML::Load("{width: {value: 100}}"));
+  EXPECT_EQ(status.code(), Status::kOk);
   status = normalizer.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 }
