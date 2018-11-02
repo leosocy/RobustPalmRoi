@@ -7,7 +7,7 @@
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
-    ::testing::GTEST_FLAG(filter) = "ChainTestFixture.test_handler_chain*";
+    ::testing::GTEST_FLAG(filter) = "*";
     return RUN_ALL_TESTS();
 }
 

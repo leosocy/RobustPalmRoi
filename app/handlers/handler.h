@@ -28,7 +28,7 @@ class HandlerFactory {
     return inst;
   }
   void RegisterHandler(const std::string& name, Handler* handler) {
-    handlers_.emplace(name, handler);
+    handlers_.emplace(name, std::shared_ptr<Handler>(handler));
   }
   std::shared_ptr<Handler> GetHandler(const std::string& name) {
     return handlers_.at(name);
@@ -42,7 +42,7 @@ class HandlerFactory {
 HandlerClass::HandlerClass() {  \
   HandlerFactory::instance().RegisterHandler(#HandlerClass, this); \
 } \
-static HandlerClass g_handler_of_##HandlerClass
+HandlerClass* g_handler_of_##HandlerClass = new HandlerClass;
 
 }   // namespace rpr
 
