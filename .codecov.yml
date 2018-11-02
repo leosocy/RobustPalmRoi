@@ -20,8 +20,8 @@ coverage:
         target: 98%
         paths: "app/"
   ignore:
-    - "thirdparty/"
-    - "test_build/"
+    - "thirdparty"
+    - "test_build"
 
 flags:
   app:
