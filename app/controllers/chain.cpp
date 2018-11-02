@@ -16,14 +16,19 @@ HandlerChain& HandlerChain::Join(std::shared_ptr<Handler> handler) {
 Status HandlerChain::Process(PalmInfoDTO& palm) {
   Status status(Status::Ok());
   clock_t start, end;
+  double total_cost = 0.0;
   auto it = handlers_.begin();
   while (it != handlers_.end() && status.IsOk()) {
     start = clock();
     status = (*it)->Handle(palm);
     end = clock();
-    printf("Handler cost time: %f ms\n", double(end - start) / CLOCKS_PER_SEC * 1000);
+    double cost = double(end - start) / CLOCKS_PER_SEC * 1000;
+    total_cost += cost;
+    printf("Handler cost time: %f ms\n", cost);
     it++;
   }
+  printf("HandlerChain total cost time: %lf ms\n", total_cost);
+
   return status;
 }
 
