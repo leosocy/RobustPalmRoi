@@ -24,7 +24,9 @@ TEST_F(NormalizerTestFixture, test_orig_normalizer) {
   OrigNormalizer normalizer;
   auto status = normalizer.Init(YAML::Load("{scaling: 0.1, width: 666}"));
   EXPECT_EQ(status.code(), Status::kLoadConfigYamlError);
-  status = normalizer.Init(YAML::Load("{scaling: {value: 0.1}, width: {value: 666}}"));
+  status = normalizer.Init(YAML::Load("{scaling: {value: 2.0}, width: {value: 666}}"));
+  EXPECT_EQ(status.code(), Status::kLoadConfigYamlError);
+  status = normalizer.Init(YAML::Load("{scaling: {value: 0.5}, width: {value: 666}}"));
   EXPECT_EQ(status.code(), Status::kOk);
   status = normalizer.Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
