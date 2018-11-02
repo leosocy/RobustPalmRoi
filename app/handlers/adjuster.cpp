@@ -63,8 +63,8 @@ Status AngleAdjuster::Adjust(PalmInfoDTO& palm) {
 
   cv::Point sub(center1.x - center2.x, center2.y - center1.y);
   if ((sub.x == 0 && sub.y == 0) || (sub.x >= orig.cols) || (sub.y >= orig.rows)) {
-    return Status::ImageLowQualityError("The quality of the palm in the image "
-                                        "does not meet the extraction requirements.");
+    return Status::ImageLowQualityError(
+      "The quality of the palm in the image does not meet the extraction requirements.");
   }
   double angle = acos(sub.y / sqrt(sub.x * sub.x + sub.y * sub.y)) / CV_PI * 180.0;
   if (sub.x < 0) {

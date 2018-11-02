@@ -30,6 +30,7 @@ inline Status Binarizer::Handle(PalmInfoDTO& palm) {
 class OtsuBinarizer : public Binarizer {
  public:
   OtsuBinarizer();
+  const char* name() override;
 
  private:
   Status Binary(PalmInfoDTO& palm) override;

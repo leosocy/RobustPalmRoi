@@ -24,7 +24,7 @@ Status HandlerChain::Process(PalmInfoDTO& palm) {
     end = clock();
     double cost = double(end - start) / CLOCKS_PER_SEC * 1000;
     total_cost += cost;
-    printf("Handler cost time: %f ms\n", cost);
+    printf("%s cost time: %f ms\n", (*it)->name(), cost);
     it++;
   }
   printf("HandlerChain total cost time: %lf ms\n", total_cost);

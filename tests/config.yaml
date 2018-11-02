@@ -25,6 +25,6 @@ HandlerChain:
     - type: IncircleRoiNormalizer
       parameters:
         width:
-          value: 512
+          value: 128
           default: 256
           description: ROI尺寸统一。设为0表示不缩放。

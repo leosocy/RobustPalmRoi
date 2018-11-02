@@ -36,11 +36,10 @@ test() {
     check_exec_success "$?" "pulling ${OPENCV_CI_IMAGE} image"
     docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -ec """
         mkdir -p test_build; cd test_build; cmake ../tests; make -j2 build_and_test;
-        cd ..;
-        lcov -b . -d test_build -c -o cov.info > /dev/null;
+        lcov -b . -d . -c -o cov.info > /dev/null;
         lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info -q;
         lcov -l cov.info;
-        genhtml -o cov_result cov.info > /dev/null; rm -rf cov_result;
+        genhtml -o cov_result cov.info > /dev/null; rm -rf ../cov_result; mv cov_result ..;
         echo ""
         echo ""
         echo \"==========Generated code coverage report under ./cov_result directory.==========\"
@@ -104,10 +103,10 @@ upload_codecov() {
         echo "Please set CODECOV_TOKEN value"
         exit 1
     fi
-    docker run -d --rm -v ${CurDir}:/app -w /app \
+    docker run -d --rm -v ${CurDir}:/app -w /app/test_build \
     -e CODECOV_TOKEN=${CODECOV_TOKEN} \
     ${OPENCV_CI_IMAGE} /bin/bash -c """
-        $(curl -s https://codecov.io/bash) -f cov.info;
+        $(curl -s https://codecov.io/bash);
     """
     check_exec_success "$?" "upload codecov"
 }

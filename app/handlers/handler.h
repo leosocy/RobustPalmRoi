@@ -18,7 +18,7 @@ class Handler {
  public:
   virtual Status Handle(PalmInfoDTO& palm) = 0;
   virtual Status Init(const YAML::Node& parameters) { return Status::Ok(); }
-  virtual const char* name() { return "Unknown"; }
+  virtual const char* name() = 0;
 };
 
 
@@ -43,6 +43,7 @@ class HandlerFactory {
 HandlerClass::HandlerClass() {  \
   HandlerFactory::instance().RegisterHandler(#HandlerClass, this); \
 } \
+const char* HandlerClass::name() { return #HandlerClass; }  \
 HandlerClass* g_handler_of_##HandlerClass = new HandlerClass;
 
 }   // namespace rpr

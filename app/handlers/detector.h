@@ -33,6 +33,7 @@ class PeakValleyDetector : public Detector {
  public:
   PeakValleyDetector();
   Status Init(const YAML::Node& parameters) override;
+  const char* name() override;
 
  private:
   enum PalmSide {

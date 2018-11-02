@@ -29,6 +29,7 @@ inline Status Extractor::Handle(PalmInfoDTO& palm) {
 class EffectiveIncircleExtractor : public Extractor {
  public:
   EffectiveIncircleExtractor();
+  const char* name() override;
 
  private:
   Status Extract(PalmInfoDTO& palm) override;

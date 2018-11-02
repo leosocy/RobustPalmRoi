@@ -62,23 +62,23 @@ void IncircleRoiNormalizer::MaskIncircle(const cv::Mat& src, cv::Mat* dst) {
 
 void IncircleRoiNormalizer::ColorBalance(const cv::Mat& src, cv::Mat* dst) {
   std::vector<cv::Mat> rgb;
-	split(src, rgb);
+  split(src, rgb);
 
-	double r, g, b;
-	b = cv::mean(rgb[0])[0];
-	g = cv::mean(rgb[1])[0];
-	r = cv::mean(rgb[2])[0];
+  double r, g, b;
+  b = cv::mean(rgb[0])[0];
+  g = cv::mean(rgb[1])[0];
+  r = cv::mean(rgb[2])[0];
 
-	double kr, kg, kb;
-	kb = (r + g + b) / (3 * b);
-	kg = (r + g + b) / (3 * g);
-	kr = (r + g + b) / (3 * r);
+  double kr, kg, kb;
+  kb = (r + g + b) / (3 * b);
+  kg = (r + g + b) / (3 * g);
+  kr = (r + g + b) / (3 * r);
 
-	rgb[0] = rgb[0] * kb;
-	rgb[1] = rgb[1] * kg;
-	rgb[2] = rgb[2] * kr;
+  rgb[0] = rgb[0] * kb;
+  rgb[1] = rgb[1] * kg;
+  rgb[2] = rgb[2] * kr;
 
-	merge(rgb, *dst);
+  merge(rgb, *dst);
 }
 
 }   // namespace rpr
