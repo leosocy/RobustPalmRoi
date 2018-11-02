@@ -36,6 +36,7 @@ test() {
     check_exec_success "$?" "pulling ${OPENCV_CI_IMAGE} image"
     docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -ec """
         mkdir -p test_build; cd test_build; cmake ../tests; make -j2 build_and_test;
+        cd ..;
         lcov -b . -d . -c -o cov.info > /dev/null;
         lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info;
         lcov -l cov.info;
@@ -103,7 +104,7 @@ upload_codecov() {
         echo "Please set CODECOV_TOKEN value"
         exit 1
     fi
-    docker run -d --rm -v ${CurDir}:/app -w /app/test_build \
+    docker run -d --rm -v ${CurDir}:/app -w /app \
     -e CODECOV_TOKEN=${CODECOV_TOKEN} \
     ${OPENCV_CI_IMAGE} /bin/bash -c """
         $(curl -s https://codecov.io/bash);
