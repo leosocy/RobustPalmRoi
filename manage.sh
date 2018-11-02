@@ -107,7 +107,7 @@ upload_codecov() {
     docker run -d --rm -v ${CurDir}:/app -w /app \
     -e CODECOV_TOKEN=${CODECOV_TOKEN} \
     ${OPENCV_CI_IMAGE} /bin/bash -c """
-        $(curl -s https://codecov.io/bash);
+        $(curl -s https://codecov.io/bash) -f cov.info;
     """
     check_exec_success "$?" "upload codecov"
 }
