@@ -21,6 +21,7 @@ coverage:
         paths: "app/"
   ignore:
     - "thirdparty/"
+    - "test_build/"
 
 flags:
   app:
