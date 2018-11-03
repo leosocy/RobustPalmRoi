@@ -7,18 +7,18 @@ coverage:
       default: off
       tests:
         target: 90%
-        paths: "tests"
+        paths: "tests/"
       app:
         target: 95%
-        paths: "app"
+        paths: "app/"
     patch:
       default: off
       tests:
         target: 95%
-        paths: "tests"
+        paths: "tests/"
       app:
         target: 98%
-        paths: "app"
+        paths: "app/"
   ignore:
     - "thirdparty"
     - "test_build"
