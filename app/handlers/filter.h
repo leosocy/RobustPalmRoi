@@ -28,6 +28,7 @@ inline Status Filter::Handle(PalmInfoDTO& palm) {
 class GaussianFilter : public Filter {
  public:
   GaussianFilter();
+  const char* name() override;
 
  private:
   Status Blur(PalmInfoDTO& palm) override;

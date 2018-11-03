@@ -39,7 +39,7 @@ test() {
         lcov -b . -d . -c -o cov.info > /dev/null;
         lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info -q;
         lcov -l cov.info;
-        genhtml -o cov_result cov.info > /dev/null; rm -rf ../cov_result; mv -f cov_result ..;
+        genhtml -o cov_result cov.info > /dev/null; rm -rf ../cov_result; mv cov_result ..;
         echo ""
         echo ""
         echo \"==========Generated code coverage report under ./cov_result directory.==========\"

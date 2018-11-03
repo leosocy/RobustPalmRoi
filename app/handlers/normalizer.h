@@ -15,6 +15,7 @@ class OrigNormalizer : public Handler {
   OrigNormalizer();
   Status Init(const YAML::Node& parameters) override;
   Status Handle(PalmInfoDTO& palm) override;
+  const char* name() override;
 
  private:
   double scaling_;
@@ -57,6 +58,7 @@ class IncircleRoiNormalizer : public RoiNormalizer {
  public:
   IncircleRoiNormalizer();
   Status Init(const YAML::Node& parameters) override;
+  const char* name() override;
 
  private:
   Status Normalize(PalmInfoDTO& palm) override;

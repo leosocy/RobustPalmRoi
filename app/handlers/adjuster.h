@@ -30,6 +30,7 @@ inline Status Adjuster::Handle(PalmInfoDTO& palm) {
 class NoiseAdjuster : public Adjuster {
  public:
   NoiseAdjuster();
+  const char* name() override;
 
  private:
   Status Adjust(PalmInfoDTO& palm) override;
@@ -42,6 +43,7 @@ class NoiseAdjuster : public Adjuster {
 class AngleAdjuster : public Adjuster {
  public:
   AngleAdjuster();
+  const char* name() override;
 
  private:
   Status Adjust(PalmInfoDTO& palm) override;
