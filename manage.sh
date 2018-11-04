@@ -73,7 +73,7 @@ lint() {
     fi
     check_exec_success "$?" "pulling ${CPPCHECK_CI_IMAGE} image"
     docker run -it --rm -v ${CurDir}:/app -w /app ${CPPCHECK_CI_IMAGE} /bin/sh -ec """
-	    cppcheck --enable=warning,performance --error-exitcode=1 app
+	    cppcheck --enable=warning,performance --error-exitcode=1 include src
     """
     check_exec_success "$?" "run lint"
 }
