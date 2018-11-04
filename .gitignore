@@ -2,7 +2,7 @@
 # Created by https://www.gitignore.io/api/c++,cmake,jetbrains,visualstudio,visualstudiocode
 
 ### special ###
-/test_*
+/build_*
 /cov*
 *.jpg
 *.DS_Store

@@ -1,0 +1,45 @@
+coverage:
+  precision: 2
+  round: nearest
+  range: "90...95"
+  status:
+    project:
+      default: off
+      test:
+        target: 90%
+        paths:
+          - "test/"
+      app:
+        target: 95%
+        paths:
+          - "include/"
+          - "src/"
+    patch:
+      default: off
+      tests:
+        target: 95%
+        paths:
+          - "test/"
+      app:
+        target: 98%
+        paths:
+          - "include/"
+          - "src/"
+  ignore:
+    - "thirdparty"
+    - "build_test"
+
+flags:
+  app:
+    paths:
+      - "include/"
+      - "src/"
+  test:
+    paths:
+      - "test/"
+
+codecov:
+  branch: master
+
+comment:
+  layout: "reach, diff, flags, files"

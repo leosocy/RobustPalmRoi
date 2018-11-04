@@ -1,0 +1,59 @@
+############################################
+#   RobustPalmRoi test cmake configuration #
+############################################
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
+SET(LIBRARY_NAME robust-palm-roi)
+SET(PROJECT_NAME test-${LIBRARY_NAME})
+PROJECT(${PROJECT_NAME})
+
+SET(PROJECT_ROOT ${CMAKE_BINARY_DIR}/..)
+SET(TEST_ROOT ${PROJECT_ROOT}/test)
+
+
+# Download and unpack googletest at configure time
+CONFIGURE_FILE(${PROJECT_ROOT}/thirdparty/gtest/CMakeLists.txt.in 
+  ${CMAKE_BINARY_DIR}/googletest-download/CMakeLists.txt)
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+  RESULT_VARIABLE result
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+IF(result)
+  MESSAGE(FATAL_ERROR "CMake step for googletest failed: ${result}")
+ENDIF()
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} --build .
+  RESULT_VARIABLE result
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+IF(result)
+  MESSAGE(FATAL_ERROR "Build step for googletest failed: ${result}")
+ENDIF()
+SET(BUILD_SHARED_LIBS ON CACHE BOOL "build gtest shared libs")
+ADD_SUBDIRECTORY(${CMAKE_BINARY_DIR}/googletest-src
+  ${CMAKE_BINARY_DIR}/googletest-build
+  EXCLUDE_FROM_ALL )
+IF(CMAKE_VERSION VERSION_LESS 2.8.11)
+  INCLUDE_DIRECTORIES("${gtest_SOURCE_DIR}/include")
+ENDIF()
+
+
+INCLUDE_DIRECTORIES(${TEST_ROOT})
+INCLUDE_DIRECTORIES(${PROJECT_ROOT}/include)
+INCLUDE_DIRECTORIES(${PROJECT_ROOT}/src)
+INCLUDE_DIRECTORIES(SYSTEM "${CMAKE_BINARY_DIR}/yaml-cpp-build/include")
+
+
+FILE(GLOB_RECURSE TEST_HEADER_FILES ${TEST_ROOT}/*.h)
+FILE(GLOB_RECURSE TEST_SRC_FILES ${TEST_ROOT}/*.cpp)
+ADD_EXECUTABLE(${PROJECT_NAME} ${TEST_HEADER_FILES} ${TEST_SRC_FILES})
+
+SET(LINK_LIBRARIES
+  ${LIBRARY_NAME}
+  gtest_main )
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${LINK_LIBRARIES})
+
+EXECUTE_PROCESS(COMMAND ${TEST_ROOT}/palm_data/download.sh)
+
+ADD_TEST(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
+ADD_CUSTOM_TARGET(build_and_test
+  COMMAND ${PROJECT_NAME}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )

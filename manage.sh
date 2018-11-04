@@ -13,7 +13,7 @@ CPPCHECK_CI_IMAGE=${DOCKER_REGISTRY}/cppcheck:1.83
 
 CACHED_IMAGES=(${OPENCV_CI_IMAGE} ${CPPCHECK_CI_IMAGE})
 
-APP_TEST_NAME=robust_palm_roi_test
+APP_TEST_NAME=test-robust-palm-roi
 
 ######## functions ########
 
@@ -35,9 +35,10 @@ test() {
     fi
     check_exec_success "$?" "pulling ${OPENCV_CI_IMAGE} image"
     docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -ec """
-        mkdir -p test_build; cd test_build; cmake ../tests; make -j2 build_and_test;
+        mkdir -p build_test; cd build_test;
+        cmake .. -DROBUST_PALM_ROI_BUILD_TESTS=ON; make -j2 build_and_test;
         lcov -b . -d . -c -o cov.info > /dev/null;
-        lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/tests/*\" \"*/test_build/*\" -o cov.info -q;
+        lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/test/*\" \"*/build_test/*\" -o cov.info -q;
         lcov -l cov.info;
         genhtml -o cov_result cov.info > /dev/null; rm -rf ../cov_result; mv cov_result ..;
         echo ""
@@ -58,8 +59,8 @@ gdbtest() {
     docker run -it --rm -v ${CurDir}:/app -w /app \
     --cap-add=SYS_PTRACE --security-opt seccomp=unconfined \
     ${OPENCV_CI_IMAGE} /bin/sh -ec """
-        mkdir -p test_build; cd test_build;
-        cmake ../tests; make -j; gdb ${APP_TEST_NAME}
+        mkdir -p build_test; cd build_test;
+        cmake .. -DROBUST_PALM_ROI_BUILD_TESTS=ON; make -j2; gdb ${APP_TEST_NAME}
     """
     check_exec_success "$?" "gdb test"
 }
@@ -103,7 +104,7 @@ upload_codecov() {
         echo "Please set CODECOV_TOKEN value"
         exit 1
     fi
-    docker run -d --rm -v ${CurDir}:/app -w /app/test_build \
+    docker run -d --rm -v ${CurDir}:/app -w /app/build_test \
     -e CODECOV_TOKEN=${CODECOV_TOKEN} \
     ${OPENCV_CI_IMAGE} /bin/bash -c """
         $(curl -s https://codecov.io/bash);
