@@ -104,7 +104,7 @@ upload_codecov() {
         echo "Please set CODECOV_TOKEN value"
         exit 1
     fi
-    docker run -d --rm -v ${CurDir}:/app -w /app/build_test \
+    docker run -d --rm -v ${CurDir}:/app -w /app \
     -e CODECOV_TOKEN=${CODECOV_TOKEN} \
     ${OPENCV_CI_IMAGE} /bin/bash -c """
         $(curl -s https://codecov.io/bash);
