@@ -1,0 +1,14 @@
+# - Config file for the robust-palm-roi package
+# It defines the following variables
+#  ROBUST_PALM_ROI_INCLUDE_DIR  - include directory
+#  ROBUST_PALM_ROI_LIBRARIES    - libraries to link against
+
+# Compute paths
+GET_FILENAME_COMPONENT(ROBUST_PALM_ROI_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+SET(ROBUST_PALM_ROI_INCLUDE_DIR "@CONFIG_INCLUDE_DIRS@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+INCLUDE("${ROBUST_PALM_ROI_CMAKE_DIR}/robust-palm-roi-targets.cmake")
+
+# These are IMPORTED targets created by robust-palm-roi-targets.cmake
+SET(ROBUST_PALM_ROI_LIBRARIES "@EXPORT_TARGETS@")
