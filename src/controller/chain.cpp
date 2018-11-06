@@ -10,7 +10,7 @@
 namespace rpr {
 
 HandlerChain& HandlerChain::Join(std::shared_ptr<Handler> handler) {
-  handlers_.emplace_back(std::move(handler));
+  handlers_.emplace_back(handler);
   return *this;
 }
 

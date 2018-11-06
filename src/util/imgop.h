@@ -17,6 +17,7 @@ float CalcPointDist(const cv::Point& p1, const cv::Point& p2);
 class ImageOperator {
  public:
   ImageOperator(const cv::Mat& src) : orig_(src) {}
+  virtual ~ImageOperator() {}
   virtual void Do(cv::Mat* res) = 0;
   // Calculate points on the operated image corresponds to the coordinates on the original image.
   virtual void ReflectPoints(const std::vector<cv::Point>& srcs, std::vector<cv::Point>* dsts) = 0;

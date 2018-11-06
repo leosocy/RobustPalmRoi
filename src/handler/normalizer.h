@@ -43,8 +43,8 @@ inline Status RoiNormalizer::Handle(PalmInfoDTO& palm) {
   ResizeImageOperator rop(roi, width_);
   rop.Do(&roi);
   int radius = roi.cols / 2;
-  WarpAffineImageOperator* wop = new WarpAffineImageOperator(roi, palm.roi_angle());
-  wop->Do(&roi);
+  WarpAffineImageOperator wop(roi, palm.roi_angle());
+  wop.Do(&roi);
 
   palm.SetRoi(cv::Mat(roi, cv::Rect(roi.cols / 2 - radius, roi.rows / 2 - radius,
                                     2 * radius, 2 * radius)));

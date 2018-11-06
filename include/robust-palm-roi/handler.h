@@ -16,6 +16,7 @@ class PalmInfoDTO;
 
 class Handler {
  public:
+  virtual ~Handler() {}
   virtual Status Handle(PalmInfoDTO& palm) = 0;
   virtual Status Init(const YAML::Node& parameters) { return Status::Ok(); }
   virtual const char* name() = 0;

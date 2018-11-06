@@ -30,22 +30,58 @@
 
 There are ***some requirements*** if you want to install `RobustPalmRoi`:
 
-1. Linux/Unix like OS
-1. OpenCV installed
-1. yaml-cpp installed
-    How to install yaml-cpp
-    1. `git clone https://github.com/jbeder/yaml-cpp.git`
-    1. `cd yaml-cpp && mkdir -p build && cd build`
-    1. `cmake -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF -DBUILD_SHARED_LIBS=ON ..`
-    1. `make -j2 && sudo make install`
+- OS Linux/Unix like.
+- OpenCV installed.
+- yaml-cpp installed.
+    ```shell
+    git clone https://github.com/jbeder/yaml-cpp.git
+    cd yaml-cpp && mkdir -p build && cd build
+    cmake -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF -DBUILD_SHARED_LIBS=ON ..
+    make -j2 && sudo make install
+    ```
 
-Steps:
+*Steps:*
 
 1. `git clone https://github.com/Leosocy/RobustPalmRoi.git`
 1. `cd RobustPalmRoi && mkdir -p build && cd build`
-1. `cmake .. && make -j2 && sudo make install`
+1. `cmake .. && sudo make install`
 
 ## Usage
+
+### C++
+
+In your CMakeLists.txt, add these lines:
+
+```cmake
+add_definitions(-std=c++11)
+find_package(robust-palm-roi REQUIRED)
+include_directories(${ROBUST_PALM_ROI_INCLUDE_DIR})
+...
+add_dependencies(${YOUR_PROJECT} ${ROBUST_PALM_ROI_LIBRARIES})
+target_link_libraries(${YOUR_PROJECT} ${ROBUST_PALM_ROI_LIBRARIES})
+```
+
+Then you can use it in your source code like this:
+
+```c++
+#include <robust-palm-roi/chain.h>
+
+int main() {
+    rpr::ChainBuilder builder;
+    builder.SetConfigYaml(config_file_name);
+    auto chain = builder.BuildAndInitChain();
+
+    cv::Mat img = cv::imread(palm_image_file_name);
+    cv::Mat roi;
+    auto status = chain->Process(img, &roi);
+
+    return 0;
+}
+```
+
+You can find other usage such as `palm video`/`camera` under `samples/cpp_sample`.
+
+- Python
 
 ## Run samples
 
@@ -57,3 +93,4 @@ Steps:
 
 Please see [LICENSE](https://github.com/Leosocy/RobustPalmRoi/blob/master/LICENSE)
 
+## Contribute
