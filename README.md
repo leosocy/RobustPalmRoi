@@ -28,6 +28,32 @@
 
 ## Installation
 
+There are ***some requirements*** if you want to install `RobustPalmRoi`:
+
+1. Linux/Unix like OS
+1. OpenCV installed
+1. yaml-cpp installed
+    How to install yaml-cpp
+    1. `git clone https://github.com/jbeder/yaml-cpp.git`
+    1. `cd yaml-cpp && mkdir -p build && cd build`
+    1. `cmake -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF -DBUILD_SHARED_LIBS=ON ..`
+    1. `make -j2 && sudo make install`
+
+Steps:
+
+1. `git clone https://github.com/Leosocy/RobustPalmRoi.git`
+1. `cd RobustPalmRoi && mkdir -p build && cd build`
+1. `cmake .. && make -j2 && sudo make install`
+
+## Usage
+
 ## Run samples
 
+### Run cpp sample
+
+### Run python sample
+
 ## License
+
+Please see [LICENSE](https://github.com/Leosocy/RobustPalmRoi/blob/master/LICENSE)
+
