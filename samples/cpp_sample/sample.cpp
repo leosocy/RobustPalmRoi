@@ -22,9 +22,13 @@ int main() {
   cv::Mat roi;
   auto status = chain->Process(img, &roi);
   if (status.IsOk()) {
-    cv::imshow("from_image", roi);
+    cv::imshow("from image", roi);
     cv::waitKey();
   }
+
+  // Extract roi from video.
+
+  // Extract roi from camera.
 
   return 0;
 }
