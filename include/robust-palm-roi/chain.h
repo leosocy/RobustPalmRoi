@@ -9,13 +9,14 @@
 #include <list>
 #include <opencv2/opencv.hpp>
 #include <yaml-cpp/yaml.h>
-#include "robust-palm-roi/handler.h"
 #include "robust-palm-roi/status.h"
-#include "robust-palm-roi/config_manager.h"
 
 namespace rpr {
 
+// Forward Declare
+class Handler;
 class PalmInfoDTO;
+class YamlConfigManager;
 
 class HandlerChain {
  public:
@@ -36,7 +37,7 @@ class ChainBuilder {
   std::unique_ptr<HandlerChain> BuildAndInitChain();
 
  private:
-  std::unique_ptr<YamlConfigManager> config_manager_;
+  std::shared_ptr<YamlConfigManager> config_manager_;
 };
 
 }   // namespace rpr

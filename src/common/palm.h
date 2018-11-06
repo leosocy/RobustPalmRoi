@@ -2,14 +2,14 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#ifndef ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_PALM_H_
-#define ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_PALM_H_
+#ifndef ROBUST_PALM_ROI_SRC_COMMON_PALM_H_
+#define ROBUST_PALM_ROI_SRC_COMMON_PALM_H_
 
 #include <cassert>
 #include <memory>
 #include <vector>
 #include <opencv2/opencv.hpp>
-#include "robust-palm-roi/types.h"
+#include "common/types.h"
 #include "util/imgop.h"
 
 namespace rpr {
@@ -55,9 +55,9 @@ class PalmInfoDTO {
   void ReflectPointsOnOrig(const Points& srcs, Points* dsts) {
     Points temp = srcs;
     for (auto it = op_records_.rbegin(); it != op_records_.rend(); ++it) {
-        (*it)->ReflectPoints(temp, dsts);
-        temp = *dsts;
-        dsts->clear();
+      (*it)->ReflectPoints(temp, dsts);
+      temp = *dsts;
+      dsts->clear();
     }
   }
   const cv::Mat& orig() { return orig_; }
@@ -79,4 +79,4 @@ class PalmInfoDTO {
 
 }   // namespace rpr
 
-#endif  // ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_PALM_H_
+#endif  // ROBUST_PALM_ROI_SRC_COMMON_PALM_H_

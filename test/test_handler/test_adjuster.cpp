@@ -3,17 +3,13 @@
 // that can be found in the LICENSE file.
 
 #include "test_base.h"
-#include "handler/binarizer.h"
-#include "handler/adjuster.h"
+#include "handler/handler.h"
 
 namespace {
 
 using cv::Mat;
 
 using rpr::Status;
-using rpr::OtsuBinarizer;
-using rpr::NoiseAdjuster;
-using rpr::AngleAdjuster;
 
 class AdjusterTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
@@ -22,25 +18,24 @@ class AdjusterTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(AdjusterTestFixture, test_noise_adjuster) {
-  NoiseAdjuster adjuster;
-  auto status = adjuster.Handle(perfect_palm_);
+  auto adjuster = rpr::HandlerFactory::instance().GetHandler("NoiseAdjuster");
+  auto status = adjuster->Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  cv::Mat res;
-  OtsuBinarizer binarizer;
-  binarizer.Handle(perfect_palm_);
-  status = adjuster.Handle(perfect_palm_);
+  auto binarizer = rpr::HandlerFactory::instance().GetHandler("OtsuBinarizer");
+  binarizer->Handle(perfect_palm_);
+  status = adjuster->Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 
 TEST_F(AdjusterTestFixture, test_angle_adjuster) {
-  AngleAdjuster adjuster;
-  auto status = adjuster.Handle(perfect_palm_);
+  auto adjuster = rpr::HandlerFactory::instance().GetHandler("AngleAdjuster");
+  auto status = adjuster->Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  OtsuBinarizer binarizer;
-  binarizer.Handle(perfect_palm_);
-  status = adjuster.Handle(perfect_palm_);
+  auto binarizer = rpr::HandlerFactory::instance().GetHandler("OtsuBinarizer");
+  binarizer->Handle(perfect_palm_);
+  status = adjuster->Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

@@ -4,14 +4,13 @@
 
 #include <yaml-cpp/yaml.h>
 #include "test_base.h"
-#include "handler/detector.h"
+#include "handler/handler.h"
 
 namespace {
 
 using cv::Mat;
 
 using rpr::Status;
-using rpr::PeakValleyDetector;
 
 class DetectorTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
@@ -20,12 +19,12 @@ class DetectorTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(DetectorTestFixture, test_peak_valley_detector) {
-  PeakValleyDetector detector;
-  auto status = detector.Init(YAML::Load("{step: 8}"));
+  auto detector = rpr::HandlerFactory::instance().GetHandler("PeakValleyDetector");
+  auto status = detector->Init(YAML::Load("{step: 8}"));
   EXPECT_EQ(status.code(), Status::kLoadConfigYamlError);
-  status = detector.Init(YAML::Load("{step: {value: 8}}"));
+  status = detector->Init(YAML::Load("{step: {value: 8}}"));
   EXPECT_EQ(status.code(), Status::kOk);
-  status = detector.Handle(perfect_palm_);
+  status = detector->Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 }
 

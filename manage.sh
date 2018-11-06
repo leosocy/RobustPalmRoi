@@ -93,7 +93,9 @@ runenv() {
     fi
     check_exec_success "$?" "pulling ${OPENCV_CI_IMAGE} image"
     docker run -it --rm -v ${CurDir}:/app -w /app ${OPENCV_CI_IMAGE} /bin/sh -ec """
-    sh
+    mkdir -p build_install; cd build_install;
+    cmake ..; make install;
+    bash
     """
 }
 

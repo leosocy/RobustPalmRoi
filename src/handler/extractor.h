@@ -5,8 +5,8 @@
 #ifndef ROBUST_PALM_ROI_SRC_HANDLER_EXTRACTOR_H_
 #define ROBUST_PALM_ROI_SRC_HANDLER_EXTRACTOR_H_
 
-#include "robust-palm-roi/types.h"
-#include "robust-palm-roi/handler.h"
+#include "common/types.h"
+#include "handler/handler.h"
 #include "common/palm.h"
 
 namespace rpr {

@@ -6,7 +6,7 @@
 #define ROBUST_PALM_ROI_SRC_HANDLER_ADJUSTER_H_
 
 #include <vector>
-#include "robust-palm-roi/handler.h"
+#include "handler/handler.h"
 #include "common/palm.h"
 
 namespace rpr {

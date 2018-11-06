@@ -2,8 +2,8 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#ifndef ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_TYPES_H_
-#define ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_TYPES_H_
+#ifndef ROBUST_PALM_ROI_SRC_COMMON_TYPES_H_
+#define ROBUST_PALM_ROI_SRC_COMMON_TYPES_H_
 
 #include <vector>
 #include <opencv2/opencv.hpp>
@@ -15,4 +15,4 @@ typedef std::vector<cv::Mat> Mats;
 
 }
 
-#endif  // ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_TYPES_H_
+#endif  // ROBUST_PALM_ROI_SRC_COMMON_TYPES_H_

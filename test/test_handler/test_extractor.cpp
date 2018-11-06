@@ -3,14 +3,13 @@
 // that can be found in the LICENSE file.
 
 #include "test_base.h"
-#include "handler/extractor.h"
+#include "handler/handler.h"
 
 namespace {
 
 using cv::Mat;
 
 using rpr::Status;
-using rpr::EffectiveIncircleExtractor;
 
 class ExtractorTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
@@ -19,8 +18,8 @@ class ExtractorTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(ExtractorTestFixture, test_effective_incircle_extractor) {
-  EffectiveIncircleExtractor extractor;
-  auto status = extractor.Handle(perfect_palm_);
+  auto extractor = rpr::HandlerFactory::instance().GetHandler("EffectiveIncircleExtractor");
+  auto status = extractor->Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kImageLowQualityError);
 }
 

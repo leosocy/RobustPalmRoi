@@ -5,7 +5,7 @@
 #ifndef ROBUST_PALM_ROI_SRC_HANDLER_NORMALIZER_H_
 #define ROBUST_PALM_ROI_SRC_HANDLER_NORMALIZER_H_
 
-#include "robust-palm-roi/handler.h"
+#include "handler/handler.h"
 #include "common/palm.h"
 #include "util/imgop.h"
 

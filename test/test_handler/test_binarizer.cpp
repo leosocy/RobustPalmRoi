@@ -3,14 +3,13 @@
 // that can be found in the LICENSE file.
 
 #include "test_base.h"
-#include "handler/binarizer.h"
+#include "handler/handler.h"
 
 namespace {
 
 using cv::Mat;
 
 using rpr::Status;
-using rpr::OtsuBinarizer;
 
 class BinarizerTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
@@ -19,17 +18,17 @@ class BinarizerTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(BinarizerTestFixture, test_otsu_binarizer) {
-  OtsuBinarizer binarizer;
-  auto status = binarizer.Handle(invalid_palm_);
+  auto binarizer = rpr::HandlerFactory::instance().GetHandler("OtsuBinarizer");
+  auto status = binarizer->Handle(invalid_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  status = binarizer.Handle(complex_env_palm_);
+  status = binarizer->Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 
   cv::Mat gray;
   cv::cvtColor(perfect_palm_.PrevHandleRes(), gray, cv::COLOR_BGR2GRAY);
   perfect_palm_.SetCurHandleRes(gray);
-  status = binarizer.Handle(perfect_palm_);
+  status = binarizer->Handle(perfect_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

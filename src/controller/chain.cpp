@@ -5,7 +5,9 @@
 #include "robust-palm-roi/chain.h"
 #include <ctime>
 #include "common/palm.h"
+#include "handler/handler.h"
 #include "handler/registry.h"
+#include "controller/config_manager.h"
 
 namespace rpr {
 
@@ -41,8 +43,7 @@ Status HandlerChain::Process(PalmInfoDTO& palm, cv::Mat* roi) {
 
 
 ChainBuilder& ChainBuilder::SetConfigYaml(const std::string& filename) {
-  YamlConfigManager* manager = new YamlConfigManager(filename);
-  config_manager_ = std::unique_ptr<YamlConfigManager>(manager);
+  config_manager_ = std::make_shared<YamlConfigManager>(filename);
   return *this;
 }
 

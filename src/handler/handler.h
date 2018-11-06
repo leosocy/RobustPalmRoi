@@ -2,8 +2,8 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#ifndef ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_HANDLER_H_
-#define ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_HANDLER_H_
+#ifndef ROBUST_PALM_ROI_SRC_HANDLER_HANDLER_H_
+#define ROBUST_PALM_ROI_SRC_HANDLER_HANDLER_H_
 
 #include <map>
 #include <opencv2/opencv.hpp>
@@ -49,4 +49,4 @@ HandlerClass* g_handler_of_##HandlerClass = new HandlerClass;
 
 }   // namespace rpr
 
-#endif  // ROBUST_PALM_ROI_INCLUDE_ROBUST_PALM_ROI_HANDLER_H_
+#endif  // ROBUST_PALM_ROI_SRC_HANDLER_HANDLER_H_

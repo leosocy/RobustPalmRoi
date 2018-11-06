@@ -6,9 +6,9 @@
 #define ROBUST_PALM_ROI_SRC_HANDLER_DETECTOR_H_
 
 #include <vector>
-#include "robust-palm-roi/types.h"
-#include "robust-palm-roi/handler.h"
 #include "common/palm.h"
+#include "common/types.h"
+#include "handler/handler.h"
 
 namespace rpr {
 

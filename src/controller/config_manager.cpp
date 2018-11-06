@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#include "robust-palm-roi/config_manager.h"
+#include "controller/config_manager.h"
 #include <cassert>
 
 namespace rpr {

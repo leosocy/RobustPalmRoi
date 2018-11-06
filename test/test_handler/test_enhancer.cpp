@@ -3,14 +3,13 @@
 // that can be found in the LICENSE file.
 
 #include "test_base.h"
-#include "handler/enhancer.h"
+#include "handler/handler.h"
 
 namespace {
 
 using cv::Mat;
 
 using rpr::Status;
-using rpr::LaplaceEnhancer;
 
 class EnhancerTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
@@ -19,11 +18,11 @@ class EnhancerTestFixture : public RobustPalmRoiTestFixtureBase {
 
 
 TEST_F(EnhancerTestFixture, test_laplace_enhancer) {
-  LaplaceEnhancer enhancer;
-  auto status = enhancer.Handle(invalid_palm_);
+  auto enhancer = rpr::HandlerFactory::instance().GetHandler("LaplaceEnhancer");
+  auto status = enhancer->Handle(invalid_palm_);
   EXPECT_EQ(status.code(), Status::kLoadImageError);
 
-  status = enhancer.Handle(complex_env_palm_);
+  status = enhancer->Handle(complex_env_palm_);
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

@@ -5,7 +5,7 @@
 #ifndef ROBUST_PALM_ROI_SRC_HANDLER_BINARIZER_H_
 #define ROBUST_PALM_ROI_SRC_HANDLER_BINARIZER_H_
 
-#include "robust-palm-roi/handler.h"
+#include "handler/handler.h"
 #include "common/palm.h"
 
 namespace rpr {
