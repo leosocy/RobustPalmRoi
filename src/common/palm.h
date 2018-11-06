@@ -19,7 +19,7 @@ class ImageOperator;
 class PalmInfoDTO {
  public:
   PalmInfoDTO() {}
-  PalmInfoDTO(const cv::Mat& orig) 
+  explicit PalmInfoDTO(const cv::Mat& orig) 
     : orig_(orig), handle_results_({orig}) {}
   void release() {
     handle_results_.clear();

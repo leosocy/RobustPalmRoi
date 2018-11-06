@@ -28,9 +28,12 @@ TEST_F(ChainTestFixture, test_handler_chain) {
   ChainBuilder builder;
   builder.SetConfigYaml(TEST_CONFIG_YAML_FILE);
   auto chain = builder.BuildAndInitChain();
-  auto status = chain->Process(complex_env_palm_);
+  cv::Mat roi;
+  auto status = chain->Process(complex_env_palm_, &roi);
   EXPECT_EQ(status.code(), Status::kOk);
-  status = chain->Process(perfect_palm_);
+  EXPECT_FALSE(roi.empty());
+  status = chain->Process(perfect_palm_.orig(), &roi);
+  EXPECT_FALSE(roi.empty());
   EXPECT_EQ(status.code(), Status::kOk);
 }
 

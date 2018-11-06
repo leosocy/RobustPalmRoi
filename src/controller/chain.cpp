@@ -14,7 +14,12 @@ HandlerChain& HandlerChain::Join(std::shared_ptr<Handler> handler) {
   return *this;
 }
 
-Status HandlerChain::Process(PalmInfoDTO& palm) {
+Status HandlerChain::Process(const cv::Mat& src, cv::Mat* roi) {
+  PalmInfoDTO palm(src);
+  return Process(palm, roi);
+}
+
+Status HandlerChain::Process(PalmInfoDTO& palm, cv::Mat* roi) {
   Status status(Status::Ok());
   clock_t start, end;
   double total_cost = 0.0;
@@ -29,6 +34,7 @@ Status HandlerChain::Process(PalmInfoDTO& palm) {
     it++;
   }
   printf("HandlerChain total cost time: %lf ms\n", total_cost);
+  *roi = palm.roi().clone();
 
   return status;
 }

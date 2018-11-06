@@ -19,7 +19,8 @@ class PalmInfoDTO;
 
 class HandlerChain {
  public:
-  Status Process(PalmInfoDTO& palm);
+  Status Process(const cv::Mat& src, cv::Mat* roi);
+  Status Process(PalmInfoDTO& palm, cv::Mat* roi);
 
  private:
   friend class ChainBuilder;
