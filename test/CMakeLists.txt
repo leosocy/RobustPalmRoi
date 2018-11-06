@@ -13,7 +13,7 @@ SET(TEST_ROOT ${PROJECT_ROOT}/test)
 
 
 # Download and unpack googletest at configure time
-CONFIGURE_FILE(${PROJECT_ROOT}/thirdparty/gtest/CMakeLists.txt.in 
+CONFIGURE_FILE(${PROJECT_ROOT}/thirdparty/gtest/CMakeLists.txt.in
   ${CMAKE_BINARY_DIR}/googletest-download/CMakeLists.txt)
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
   RESULT_VARIABLE result
@@ -39,7 +39,6 @@ ENDIF()
 INCLUDE_DIRECTORIES(${TEST_ROOT})
 INCLUDE_DIRECTORIES(${PROJECT_ROOT}/include)
 INCLUDE_DIRECTORIES(${PROJECT_ROOT}/src)
-INCLUDE_DIRECTORIES(SYSTEM "${CMAKE_BINARY_DIR}/yaml-cpp-build/include")
 
 
 FILE(GLOB_RECURSE TEST_HEADER_FILES ${TEST_ROOT}/*.h)
