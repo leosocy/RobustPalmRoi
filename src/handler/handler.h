@@ -22,6 +22,8 @@ class Handler {
   virtual const char* name() = 0;
 };
 
+typedef std::shared_ptr<Handler> HandlerSharedPtr;
+
 
 class HandlerFactory {
  public:
@@ -30,14 +32,14 @@ class HandlerFactory {
     return inst;
   }
   void RegisterHandler(const std::string& name, Handler* handler) {
-    handlers_.emplace(name, std::shared_ptr<Handler>(handler));
+    handlers_.emplace(name, handler);
   }
-  std::shared_ptr<Handler> GetHandler(const std::string& name) {
+  HandlerSharedPtr GetHandler(const std::string& name) {
     return handlers_.at(name);
   }
 
  private:
-  std::map<std::string, std::shared_ptr<Handler> > handlers_;
+  std::map<std::string, HandlerSharedPtr> handlers_;
 };
 
 #define REGISTER_HANDLER(HandlerClass) \
