@@ -6,9 +6,13 @@
 #include <robust-palm-roi/chain.h>
 
 
-#define TEST_ROOT "../../../test"
-const char* config_file_name = TEST_ROOT"/config.yaml";
-const char* palm_image_file_name = TEST_ROOT"/palm_data/palm_perfect.jpg";
+#define SAMPLES_ROOT "../.."
+const char* config_file_name = SAMPLES_ROOT"/config.yaml";
+const char* palm_images[] = {
+  SAMPLES_ROOT"/palm_data/left_palm_not_rotating.jpg",
+  SAMPLES_ROOT"/palm_data/left_palm_left_rotating.jpg",
+  SAMPLES_ROOT"/palm_data/left_palm_right_rotating.jpg"
+};
 
 int main() {
 
@@ -18,17 +22,19 @@ int main() {
   auto chain = builder.BuildAndInitChain();
 
   // Extract roi from image.
-  cv::Mat img = cv::imread(palm_image_file_name);
-  cv::Mat roi;
-  auto status = chain->Process(img, &roi);
-  if (status.IsOk()) {
-    cv::imshow("from image", roi);
-    cv::waitKey();
+  for (int i = 0; i < sizeof(palm_images) / sizeof(palm_images[0]); ++i) {
+    cv::Mat palm = cv::imread(palm_images[i]);
+    assert (!palm.empty());
+    cv::Mat roi;
+    auto status = chain->Process(palm, &roi);
+    if (status.IsOk()) {
+      std::string window_name = std::string(palm_images[i]).substr(std::string(palm_images[i]).rfind("/") + 1);
+      cv::resize(palm, palm, cv::Size(256, palm.rows * 256 / palm.cols));
+      cv::imshow(std::string("origin_") + window_name, palm);
+      cv::imshow(std::string("roi_") + window_name, roi);
+    }
   }
-
-  // Extract roi from video.
-
-  // Extract roi from camera.
+  cv::waitKey();
 
   return 0;
 }

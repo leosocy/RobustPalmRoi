@@ -67,7 +67,7 @@ void EffectiveIncircleExtractor::ReflectIncircleOnOrig(
   palm.ReflectPointsOnOrig({*center, base, refer}, &reflect_points);
   *center = reflect_points[0];
   refer = reflect_points[2];
-  *radius = CalcPointDist(*center, reflect_points[1]) * 0.95;
+  *radius = CalcPointDist(*center, reflect_points[1]) * 0.90;
   cv::Point sub(refer.x - center->x, center->y - refer.y);
   *angle = acos(sub.y / sqrt(sub.x * sub.x + sub.y * sub.y)) / CV_PI * 180.0;
   if (sub.x < 0) {

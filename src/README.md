@@ -2,15 +2,17 @@
 
 ## Handlers
 
-1. Normalizer: 标准化处理
-    - 对原图: 缩小图片，加快处理速度
-    - 对ROI: 尺寸统一、光照平衡、circle遮罩
-1. Enhancer: 图像增强处理
-1. Filter: 图像滤波处理
-1. Binarizer: 二值化
-1. Adjuster: 填孔洞、去噪点，提取手掌唯一连通域，调整手掌角度
-1. Detector: 检测是否有手掌、图片质量是否符合ROI提取标准
-1. Extractor: ROI(region of interested)提取器(最大内切圆提取法......)
+| handler | 功能 |
+|:-------:|:----:|
+|`OrigNormalizer`|对原始手掌图像进行尺寸统一缩减，增加后续handler处理速度|
+|`LaplaceEnhancer`|对手掌图像进行拉普拉斯增强，突出手掌前景|
+|`GaussianFilter`|去除图像噪声|
+|`OtsuBinarizer`|最大类间方差法进行二值化|
+|`NoiseAdjuster`|去除二值化中的噪点，只保留一个手掌连通域|
+|`AngleAdjuster`|根据重心法寻找中指指尖，并且旋转二值图|
+|`PeakValleyDetector`|检测手掌的5个指尖，以及4个谷底|
+|`EffectiveIncircleExtractor`|最大有效内切圆算法提取ROI|
+|`IncircleRoiNormalizer`|对ROI进行尺寸统一、光照平衡、circle遮罩|
 
 ## Controllers
 
@@ -65,7 +67,3 @@ HandlerChain:
 
 builder.SetConfig()
 builder.BuildAndInitChain()
-
-## Apis
-
-- GetPalmRoi(const cv::Mat& palm, cv::Mat* roi);
