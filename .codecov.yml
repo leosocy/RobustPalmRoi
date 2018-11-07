@@ -26,8 +26,7 @@ coverage:
           - "include/"
           - "src/"
   ignore:
-    - "thirdparty/**/*"
-    - "build_test/**/*"
+    - "thirdparty"
 
 flags:
   app:

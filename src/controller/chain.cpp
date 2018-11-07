@@ -42,8 +42,11 @@ Status HandlerChain::Process(PalmInfoDTO& palm, cv::Mat* roi) {
 }
 
 
+ChainBuilder::ChainBuilder() = default;
+ChainBuilder::~ChainBuilder() = default;
+
 ChainBuilder& ChainBuilder::SetConfigYaml(const std::string& filename) {
-  config_manager_ = std::make_shared<YamlConfigManager>(filename);
+  config_manager_ = std::unique_ptr<YamlConfigManager>(new YamlConfigManager(filename));
   return *this;
 }
 

@@ -33,11 +33,14 @@ class HandlerChain {
 
 class ChainBuilder {
  public:
+  ChainBuilder();
+  ~ChainBuilder();
+
   ChainBuilder& SetConfigYaml(const std::string& filename);
   std::unique_ptr<HandlerChain> BuildAndInitChain();
 
  private:
-  std::shared_ptr<YamlConfigManager> config_manager_;
+  std::unique_ptr<YamlConfigManager> config_manager_;
 };
 
 }   // namespace rpr
