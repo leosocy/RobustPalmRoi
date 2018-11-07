@@ -26,6 +26,12 @@
 |`EffectiveIncircleExtractor`|最大有效内切圆算法提取ROI|
 |`IncircleRoiNormalizer`|对ROI进行尺寸统一、光照平衡、circle遮罩|
 
+| Description | Original Image | ROI |
+| :---------: | :------------: |:---:|
+|Left Palm No Rotating|![](https://blog-images-1257621236.cos.ap-shanghai.myqcloud.com/20181107225449.png)|![](https://blog-images-1257621236.cos.ap-shanghai.myqcloud.com/20181107225814.png)|
+|Left Palm Left Rotating|![](https://blog-images-1257621236.cos.ap-shanghai.myqcloud.com/20181107230103.png)|![](https://blog-images-1257621236.cos.ap-shanghai.myqcloud.com/20181107230130.png)|
+|Left Palm Right Rotating|![](https://blog-images-1257621236.cos.ap-shanghai.myqcloud.com/20181107230208.png)|![](https://blog-images-1257621236.cos.ap-shanghai.myqcloud.com/20181107230221.png)|
+
 ## Installation
 
 There are ***some requirements*** if you want to install `RobustPalmRoi`:
@@ -79,7 +85,7 @@ int main() {
 }
 ```
 
-You can find other usage such as `palm video`/`camera` under `samples/cpp_sample`.
+You can find the detail under `samples/cpp_sample`.
 
 - Python
 
