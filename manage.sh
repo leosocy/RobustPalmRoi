@@ -38,7 +38,7 @@ test() {
         mkdir -p build_test; cd build_test;
         cmake .. -DROBUST_PALM_ROI_BUILD_TESTS=ON; make -j2 build_and_test;
         lcov -b . -d . -c -o cov.info > /dev/null;
-        lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/test/*\" \"*/build_test/*\" -o cov.info -q;
+        lcov -r cov.info \"/usr/*\" \"*/thirdparty/*\" \"*/test/*\" \"*/build_test/*\" \"/**/b64.*\" -o cov.info -q;
         lcov -l cov.info;
         genhtml -o cov_result cov.info > /dev/null; rm -rf ../cov_result; mv cov_result ..;
         echo ""

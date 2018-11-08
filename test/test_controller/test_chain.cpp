@@ -12,7 +12,7 @@ using rpr::ChainBuilder;
 
 class ChainTestFixture : public RobustPalmRoiTestFixtureBase {
  public:
-  ChainTestFixture() : RobustPalmRoiTestFixtureBase(1.0) {}
+  ChainTestFixture() : RobustPalmRoiTestFixtureBase(0.2) {}
 };
 
 
