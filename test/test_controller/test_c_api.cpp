@@ -4,7 +4,7 @@
 
 #include "test_base.h"
 #include "robust-palm-roi/c_api.h"
-#include "common/b64.h"
+#include "util/b64.h"
 
 namespace {
 

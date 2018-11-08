@@ -4,7 +4,7 @@
 
 #include "robust-palm-roi/c_api.h"
 #include "robust-palm-roi/chain.h"
-#include "common/b64.h"
+#include "util/b64.h"
 
 static std::vector< std::unique_ptr<rpr::HandlerChain> > g_chain_ptr_vec;
 

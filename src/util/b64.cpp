@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-#include "common/b64.h"
+#include "util/b64.h"
 
 static const std::string base64_chars = 
              "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
