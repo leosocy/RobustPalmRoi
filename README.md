@@ -1,12 +1,12 @@
-# RobustPalmRoi: An algorithm of ROI extraction for palm ***captured by mobile phone***
+# A robust algorithm for extracting ROI from palm image ***taken by mobile phone***
 
 [![Build Status](https://travis-ci.org/Leosocy/RobustPalmRoi.svg?branch=master)](https://travis-ci.org/Leosocy/RobustPalmRoi)
 [![codecov](https://codecov.io/gh/Leosocy/RobustPalmRoi/branch/master/graph/badge.svg)](https://codecov.io/gh/Leosocy/RobustPalmRoi)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-green.svg)](https://raw.githubusercontent.com/Leosocy/RobustPalmRoi/master/LICENSE)
 
-The palm image captured by the mobile phone has differences in angle, illumination, etc. The `RobustPalmRoi` algorithm reduces these differences through a series of handlers, thus extracting a stable ROI.
+The palm image taken by the mobile phone has differences in angle, illumination, etc. The `RobustPalmRoi` algorithm reduces these differences through a series of handlers, thus extracting a stable ROI.
 
-The following palms are captured by iPhoneX and have different angles. The corresponding ROI is below it.
+The following palms are taken by iPhoneX and have different angles. The corresponding ROI is below it.
 
 ![](https://blog-images-1257621236.cos.ap-shanghai.myqcloud.com/original_palm_set.jpg)
 ![](https://blog-images-1257621236.cos.ap-shanghai.myqcloud.com/roi_palm_set.jpg)
@@ -20,7 +20,7 @@ Advantages of `RobustPalmRoi` algorithm:
 Some *tips* for capturing palms on mobile phones:
 
 1. Five fingers open.
-1. Capture the whole palm.
+1. Take the whole palm.
 1. As much light as possible.
 
 ## Installation
@@ -85,9 +85,5 @@ Make sure you have installed `RobustPalmRoi` before running examples.
 ### Run cpp sample
 
 ### Run python sample
-
-## License
-
-Please see [LICENSE](https://github.com/Leosocy/RobustPalmRoi/blob/master/LICENSE)
 
 ## Contribute
