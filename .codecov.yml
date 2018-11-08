@@ -5,31 +5,37 @@ coverage:
   status:
     project:
       default: off
-      tests:
+      test:
         target: 90%
-        paths: "tests"
+        paths:
+          - "test/"
       app:
         target: 95%
-        paths: "app"
+        paths:
+          - "include/"
+          - "src/"
     patch:
       default: off
       tests:
         target: 95%
-        paths: "tests"
+        paths:
+          - "test/"
       app:
         target: 98%
-        paths: "app"
+        paths:
+          - "include/"
+          - "src/"
   ignore:
     - "thirdparty"
-    - "test_build"
 
 flags:
   app:
     paths:
-      - "app/"
-  tests:
+      - "include/"
+      - "src/"
+  test:
     paths:
-      - "tests/"
+      - "test/"
 
 codecov:
   branch: master
