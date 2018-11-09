@@ -19,7 +19,7 @@ class CApiTestFixture : public RobustPalmRoiTestFixtureBase {
 
  protected:
   std::string perfect_palm_base64_;
-  std::vector<unsigned char> perfect_palm_bytes_;
+  std::vector<uchar> perfect_palm_bytes_;
 };
 
 TEST_F(CApiTestFixture, test_init_chain) {
@@ -33,6 +33,21 @@ TEST_F(CApiTestFixture, test_chain_process_base64) {
   char status[128];
   chain_process_base64(chain, perfect_palm_base64_.c_str(), roi_base64, status);
   EXPECT_EQ(status[0], '\0');
+}
+
+TEST_F(CApiTestFixture, test_chain_process_bytes) {
+  void* chain = init_chain(TEST_CONFIG_YAML_FILE);
+  char* plam_bytes = new char[perfect_palm_bytes_.size()];
+  for (size_t i = 0; i < perfect_palm_bytes_.size(); ++i) {
+    *(plam_bytes + i) = perfect_palm_bytes_[i];
+  }
+  char roi_bytes[1024 * 1024];   // 1 MB can store about 768 KB of image.
+  unsigned long roi_bytes_size = 0;
+  char status[128];
+  chain_process_bytes(chain, plam_bytes, perfect_palm_bytes_.size(),
+                      roi_bytes, &roi_bytes_size, status);
+  EXPECT_EQ(status[0], '\0');
+  EXPECT_GT(roi_bytes_size, 0);
 }
 
 }

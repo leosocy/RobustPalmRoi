@@ -26,7 +26,7 @@ void chain_process_base64(void* chain_ptr, const char* palm_base64,
 
   auto status = chain->Process(palm, &roi);
   // mat to base64 string
-  std::vector<unsigned char> roi_bytes;
+  std::vector<uchar> roi_bytes;
   cv::imencode(".png", roi, roi_bytes);
   std::string roi_b64_str = rpr::base64_encode(roi_bytes.data(), roi_bytes.size());
 
@@ -56,7 +56,7 @@ void chain_process_bytes(void* chain_ptr,
   cv::Mat roi;
 
   auto status = chain->Process(palm, &roi);
-  std::vector<unsigned char> r_bytes;
+  std::vector<uchar> r_bytes;
   cv::imencode(".png", roi, r_bytes);
 
   *roi_bytes_size = r_bytes.size();
