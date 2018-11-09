@@ -13,12 +13,12 @@ void* init_chain(const char* config_file_name) {
   builder.SetConfigYaml(config_file_name);
   auto chain = builder.BuildAndInitChain();
   g_chain_ptr_vec.emplace_back(std::move(chain));
-  return static_cast<void*>(g_chain_ptr_vec.back().get());
+  return reinterpret_cast<void*>(g_chain_ptr_vec.back().get());
 }
 
 void chain_process_base64(void* chain_ptr, const char* palm_base64,
                           char* roi_base64, char* status_ptr) {
-  rpr::HandlerChain* chain = static_cast<rpr::HandlerChain*>(chain_ptr);
+  rpr::HandlerChain* chain = reinterpret_cast<rpr::HandlerChain*>(chain_ptr);
   // base64 string to mat
   auto bytes = rpr::base64_decode(palm_base64);
   cv::Mat palm(cv::imdecode(bytes, 1));
@@ -35,7 +35,36 @@ void chain_process_base64(void* chain_ptr, const char* palm_base64,
   }
   *roi_base64 = '\0';
 
-  status_ptr[0] = status.code();
+  *status_ptr++ = status.code();
+  for (size_t i = 0; i < std::string(status.msg()).length(); ++i) {
+    *status_ptr++ = std::string(status.msg())[i];
+  }
+  *status_ptr = '\0';
+}
+
+void chain_process_bytes(void* chain_ptr,
+                         const char* palm_bytes, unsigned long palm_bytes_size,
+                         char* roi_bytes, unsigned long* roi_bytes_size,
+                         char* status_ptr) {
+  rpr::HandlerChain* chain = reinterpret_cast<rpr::HandlerChain*>(chain_ptr);
+  // bytes to vector
+  std::vector<uchar> p_bytes;
+  for (size_t i = 0; i < palm_bytes_size; ++i) {
+    p_bytes.push_back(*(palm_bytes + i));
+  }
+  cv::Mat palm(cv::imdecode(p_bytes, 1));
+  cv::Mat roi;
+
+  auto status = chain->Process(palm, &roi);
+  std::vector<unsigned char> r_bytes;
+  cv::imencode(".png", roi, r_bytes);
+
+  *roi_bytes_size = r_bytes.size();
+  for (size_t i = 0; i < r_bytes.size(); ++i) {
+    *roi_bytes++ = r_bytes[i];
+  }
+
+  *status_ptr++ = status.code();
   for (size_t i = 0; i < std::string(status.msg()).length(); ++i) {
     *status_ptr++ = std::string(status.msg())[i];
   }

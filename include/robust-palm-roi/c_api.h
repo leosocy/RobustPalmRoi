@@ -29,6 +29,18 @@ ROBUST_PALM_ROI_API void* init_chain(const char* config_file_name);
 ROBUST_PALM_ROI_API void chain_process_base64(void* chain_ptr, const char* palm_base64,
                                               char* roi_base64, char* status_ptr);
 
+/**
+ * Use chain to process an image bytes.
+ * @param chain_ptr supplies a pointer of `HandlerChain` returned from `init_chain`.
+ * @param palm_bytes supplies a bytes of image.
+ * @param roi_bytes supplies a bytes of roi image.
+ * @param status a pointer of status, status[0] stands for code, status[1:] stands for msg.
+ */
+ROBUST_PALM_ROI_API void chain_process_bytes(void* chain_ptr,
+                                             const char* palm_bytes, unsigned long palm_bytes_size,
+                                             char* roi_bytes, unsigned long* roi_bytes_size,
+                                             char* status_ptr);
+
 #ifdef __cplusplus
 }
 #endif
