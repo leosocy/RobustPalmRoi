@@ -16,57 +16,55 @@ void* init_chain(const char* config_file_name) {
   return reinterpret_cast<void*>(g_chain_ptr_vec.back().get());
 }
 
-void chain_process_base64(void* chain_ptr, const char* palm_base64,
-                          char* roi_base64, char* status_ptr) {
+void chain_process_base64(
+    void* chain_ptr, const char* palm_base64,
+    char* roi_base64, unsigned long roi_base64_max_size,
+    char* status_ptr) {
   rpr::HandlerChain* chain = reinterpret_cast<rpr::HandlerChain*>(chain_ptr);
+
   // base64 string to mat
   auto bytes = rpr::base64_decode(palm_base64);
   cv::Mat palm(cv::imdecode(bytes, 1));
   cv::Mat roi;
-
   auto status = chain->Process(palm, &roi);
   // mat to base64 string
   std::vector<uchar> roi_bytes;
   cv::imencode(".png", roi, roi_bytes);
   std::string roi_b64_str = rpr::base64_encode(roi_bytes.data(), roi_bytes.size());
 
-  for (size_t i = 0; i < roi_b64_str.size(); ++i) {
-    *roi_base64++ = roi_b64_str[i];
+  if (roi_b64_str.size() > roi_base64_max_size - 1) {
+    status = rpr::Status::CApiOutBufferInsufficient(
+      "The size of roi base64 buffer is insufficient.");
+  } else {
+    memcpy(roi_base64, roi_b64_str.c_str(), roi_b64_str.size() + 1);
   }
-  *roi_base64 = '\0';
-
   *status_ptr++ = status.code();
-  for (size_t i = 0; i < std::string(status.msg()).length(); ++i) {
-    *status_ptr++ = std::string(status.msg())[i];
-  }
-  *status_ptr = '\0';
+  memcpy(status_ptr, status.msg(), strlen(status.msg()) + 1);
 }
 
-void chain_process_bytes(void* chain_ptr,
-                         const char* palm_bytes, unsigned long palm_bytes_size,
-                         char* roi_bytes, unsigned long* roi_bytes_size,
-                         char* status_ptr) {
+void chain_process_bytes(
+    void* chain_ptr, const char* palm_bytes, unsigned long palm_bytes_size,
+    char* roi_bytes, unsigned long roi_bytes_max_size, unsigned long* roi_bytes_size,
+    char* status_ptr) {
   rpr::HandlerChain* chain = reinterpret_cast<rpr::HandlerChain*>(chain_ptr);
-  // bytes to vector
-  std::vector<uchar> p_bytes;
+
+  std::vector<uchar> vp_bytes;
   for (size_t i = 0; i < palm_bytes_size; ++i) {
-    p_bytes.push_back(*(palm_bytes + i));
+    vp_bytes.push_back(*(palm_bytes + i));
   }
-  cv::Mat palm(cv::imdecode(p_bytes, 1));
+  cv::Mat palm(cv::imdecode(vp_bytes, 1));
   cv::Mat roi;
-
   auto status = chain->Process(palm, &roi);
-  std::vector<uchar> r_bytes;
-  cv::imencode(".png", roi, r_bytes);
+  std::vector<uchar> vr_bytes;
+  cv::imencode(".png", roi, vr_bytes);
 
-  *roi_bytes_size = r_bytes.size();
-  for (size_t i = 0; i < r_bytes.size(); ++i) {
-    *roi_bytes++ = r_bytes[i];
+  if (vr_bytes.size() > roi_bytes_max_size) {
+    status = rpr::Status::CApiOutBufferInsufficient(
+      "The size of roi bytes buffer is insufficient.");
+  } else {
+    *roi_bytes_size = vr_bytes.size();
+    memcpy(roi_bytes, &vr_bytes[0], vr_bytes.size());
   }
-
   *status_ptr++ = status.code();
-  for (size_t i = 0; i < std::string(status.msg()).length(); ++i) {
-    *status_ptr++ = std::string(status.msg())[i];
-  }
-  *status_ptr = '\0';
+  memcpy(status_ptr, status.msg(), strlen(status.msg()) + 1);
 }
