@@ -42,21 +42,21 @@ TEST_F(CApiTestFixture, test_chain_process_base64) {
 
 TEST_F(CApiTestFixture, test_chain_process_bytes) {
   void* chain = init_chain(TEST_CONFIG_YAML_FILE);
-  char* plam_bytes = new char[perfect_palm_bytes_.size()];
+  char* palm_bytes = new char[perfect_palm_bytes_.size()];
   for (size_t i = 0; i < perfect_palm_bytes_.size(); ++i) {
-    *(plam_bytes + i) = perfect_palm_bytes_[i];
+    *(palm_bytes + i) = perfect_palm_bytes_[i];
   }
   unsigned long roi_bytes_max_size = 1024 * 1024;
   char roi_bytes[roi_bytes_max_size];   // 1 MB can store about 768 KB of image.
   unsigned long roi_bytes_size = 0;
   char status[128];
-  chain_process_bytes(chain, plam_bytes, perfect_palm_bytes_.size(),
+  chain_process_bytes(chain, palm_bytes, perfect_palm_bytes_.size(),
                       roi_bytes, roi_bytes_max_size, &roi_bytes_size, status);
   EXPECT_EQ(status[0], '\0');
   EXPECT_GT(roi_bytes_size, 0);
 
   roi_bytes_max_size = 10;
-  chain_process_bytes(chain, plam_bytes, perfect_palm_bytes_.size(),
+  chain_process_bytes(chain, palm_bytes, perfect_palm_bytes_.size(),
                       roi_bytes, roi_bytes_max_size, &roi_bytes_size, status);
   EXPECT_NE(status[0], '\0');
 }
