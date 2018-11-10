@@ -25,7 +25,9 @@ Some *tips* for capturing palms on mobile phones:
 
 ## Installation
 
-There are ***some requirements*** if you want to install `RobustPalmRoi`:
+### Install library
+
+There are ***some requirements*** if you want to install `RobustPalmRoi` library:
 
 - OS Linux/Unix like.
 - [`OpenCV`](https://docs.opencv.org/3.4/d7/d9f/tutorial_linux_install.html) installed.
@@ -36,6 +38,17 @@ There are ***some requirements*** if you want to install `RobustPalmRoi`:
 1. `git clone https://github.com/Leosocy/RobustPalmRoi.git`
 1. `cd RobustPalmRoi && mkdir -p build && cd build`
 1. `cmake .. && sudo make install`
+
+### Install Python module
+
+Please make sure the C++ library is installed successfully.
+
+**Python3.x** required.
+
+*Steps:*
+
+1. `cd pypackage`
+1. `python setup.py install`
 
 ## Usage
 
@@ -76,14 +89,48 @@ int main() {
 
 You can find the detail under `samples/cpp_sample` directory.
 
-- Python
+### Python
+
+```Python
+from rpr import HandlerChain
+
+chain = HandlerChain('your_config.yaml')
+
+# Process image, and get bytes of roi, and save roi as image.
+import io
+with open('your_palm_image.png', 'rb') as palm:
+    roi_bytes = chain.process_image(palm)
+    roi = io.BytesIO(roi_bytes)
+    with open('your_roi_image.png', 'wb') as roi_image:
+        roi_image.write(roi.read())
+
+# Process base64 string of image, and get base64 string of roi.
+import base64
+with open('your_palm_image.png', 'rb') as palm:
+    palm_b64 = base64.b64encode(palm.read())
+    roi_b64 = chain.process_base64(palm_b64)
+```
+
+You can find the detail under `samples/py_sample` directory.
 
 ## Run samples
 
-Make sure you have installed `RobustPalmRoi` before running examples.
+Make sure you have installed `library` and `rpr.py` before running examples.
+
+Before you run `cpp` or `python` sample, please prepare some date follow this:
+
+1. `cd samples/palm_data`
+1. `./download.sh`
 
 ### Run cpp sample
 
+1. `cd cpp_sample`
+1. `mkdir build; cd build; cmake ..; make -j`
+1. `./run_cpp_sample`
+
 ### Run python sample
+
+1. `cd py_sample`
+1. `python run_sample.py`
 
 ## Contribute

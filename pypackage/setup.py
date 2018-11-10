@@ -23,8 +23,11 @@ rpr_classifiers = [
     # Trove classifiers
     # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
     'Development Status :: 2 - Pre-Alpha',
-    'Programming Language :: Python :: 2',
+    'Programming Language :: Python',
     'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Topic :: Software Development :: Libraries',
@@ -44,7 +47,7 @@ setup(
     long_description_content_type='text/markdown',
     author=AUTHOR,
     author_email=EMAIL,
-    python_requires='>=2.6, !=3.0.*, !=3.1.*',
+    python_requires='>=3',
     url=URL,
     py_modules=['rpr'],
     include_package_data=True,
