@@ -130,4 +130,6 @@ Before you run `cpp` or `python` sample, please prepare some date follow this:
 1. `cd py_sample`
 1. `python run_sample.py`
 
-## Contribute
+## Contributing
+
+Please see [CONTRIBUTING.md](https://github.com/Leosocy/RobustPalmRoi/blob/master/CONTRIBUTING.md)
