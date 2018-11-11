@@ -18,11 +18,13 @@ class Status {
     kLoadImageError,
     kImageLowQualityError,
     kLoadConfigYamlError,
+    kCApiOutBufferInsufficient,
   };
   static Status Ok(const char* msg = NULL) { return Status(kOk, msg); }
   static Status LoadImageError(const char* msg = NULL) { return Status(kLoadImageError, msg); }
   static Status ImageLowQualityError(const char* msg = NULL) { return Status(kImageLowQualityError, msg); }
   static Status LoadConfigYamlError(const char* msg = NULL) { return Status(kLoadConfigYamlError, msg); }
+  static Status CApiOutBufferInsufficient(const char* msg = NULL) { return Status(kCApiOutBufferInsufficient, msg); }
 
   Status() : state_(NULL) {}
   Status(const Status& s) {
