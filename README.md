@@ -2,7 +2,10 @@
 
 [![Build Status](https://travis-ci.org/Leosocy/RobustPalmRoi.svg?branch=master)](https://travis-ci.org/Leosocy/RobustPalmRoi)
 [![codecov](https://codecov.io/gh/Leosocy/RobustPalmRoi/branch/master/graph/badge.svg)](https://codecov.io/gh/Leosocy/RobustPalmRoi)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-green.svg)](https://raw.githubusercontent.com/Leosocy/RobustPalmRoi/master/LICENSE)
+[![Python version](https://img.shields.io/badge/python-3.4⤴️-brightgreen.svg)](https://github.com/Leosocy/RobustPalmRoi/tree/master/pypackage)
+[![Tag](https://img.shields.io/badge/tag-v0.1.0-brightgreen.svg)](https://github.com/Leosocy/RobustPalmRoi/releases/tag/v0.1.0)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://raw.githubusercontent.com/Leosocy/RobustPalmRoi/master/LICENSE)
+![Platform](https://img.shields.io/badge/platform-linux%20%7C%20unix-brightgreen.svg)
 
 The palm image taken by the mobile phone has differences in angle, illumination, etc. The `RobustPalmRoi` algorithm reduces these differences through a series of handlers, thus extracting a stable ROI.
 
@@ -21,7 +24,7 @@ Some *tips* for capturing palms on mobile phones:
 
 1. Five fingers open.
 1. Take the whole palm.
-1. As much light as possible.
+1. Low illumination on the background.
 
 ## Installation
 
