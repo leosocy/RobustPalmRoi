@@ -103,12 +103,6 @@ with open('your_palm_image.png', 'rb') as palm:
     roi = io.BytesIO(roi_bytes)
     with open('your_roi_image.png', 'wb') as roi_image:
         roi_image.write(roi.read())
-
-# Process base64 string of image, and get base64 string of roi.
-import base64
-with open('your_palm_image.png', 'rb') as palm:
-    palm_b64 = base64.b64encode(palm.read())
-    roi_b64 = chain.process_base64(palm_b64)
 ```
 
 You can find the detail under `samples/py_sample` directory.

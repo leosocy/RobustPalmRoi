@@ -34,12 +34,6 @@ class HandlerChain(object):
         self._lib.init_chain.argtypes = [ctypes.c_char_p]
         self._lib.init_chain.restype = ctypes.c_void_p
 
-        self._lib.chain_process_base64.argtypes = [
-            ctypes.c_void_p, ctypes.c_char_p,
-            ctypes.c_char_p, ctypes.c_long, ctypes.c_char_p
-        ]
-        self._lib.chain_process_base64.restype = None
-
         self._lib.chain_process_bytes.argtypes = [
             ctypes.c_void_p, ctypes.c_char_p, ctypes.c_long,
             ctypes.c_char_p, ctypes.c_long, ctypes.POINTER(ctypes.c_long),
@@ -53,12 +47,14 @@ class HandlerChain(object):
         '''
         Process palm image
 
-        :param image: The palm image
-        :type param: a file object which opening for [r]eading as [b]inary
+        :param image: The palm image or bytes of image
         :return: roi
         :rtype: bytes
         '''
-        palm_data = image.read()
+        if isinstance(image, bytes):
+            palm_data = image
+        else:
+            palm_data = image.read()
         roi_bytes_max_size = 1024 * 1024
         roi_bytes = ctypes.create_string_buffer(roi_bytes_max_size)
         roi_bytes_size = ctypes.c_long(0)
@@ -67,21 +63,6 @@ class HandlerChain(object):
                                       roi_bytes, roi_bytes_max_size, roi_bytes_size, status)
         self._check_status(status)
         return roi_bytes.raw[:roi_bytes_size.value]
-
-    def process_base64(self, b64_str):
-        '''
-        Procees base64 encoded image
-
-        :param str b64_str: The base64 encoding string for the image
-        :return: the base64 encoding string for the roi
-        :rtype: str
-        '''
-        roi_b64_size = 1024 * 1024
-        roi_b64 = ctypes.create_string_buffer(roi_b64_size)  # can store about 768 KB of image.
-        status = ctypes.create_string_buffer(128)
-        self._lib.chain_process_base64(self._chain, b64_str, roi_b64, roi_b64_size, status)
-        self._check_status(status)
-        return roi_b64.value
 
     @staticmethod
     def _check_status(status):
