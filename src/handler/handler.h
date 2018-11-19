@@ -31,7 +31,7 @@ class HandlerFactory {
     static HandlerFactory inst;
     return inst;
   }
-  void RegisterHandler(const std::string& name, Handler* handler) {
+  void RegisterHandler(const std::string& name, HandlerSharedPtr handler) {
     handlers_.emplace(name, handler);
   }
   HandlerSharedPtr GetHandler(const std::string& name) {
@@ -44,7 +44,7 @@ class HandlerFactory {
 
 #define REGISTER_HANDLER(HandlerClass) \
 HandlerClass::HandlerClass() {  \
-  HandlerFactory::instance().RegisterHandler(#HandlerClass, this); \
+  HandlerFactory::instance().RegisterHandler(#HandlerClass, std::shared_ptr<Handler>(this)); \
 } \
 const char* HandlerClass::name() { return #HandlerClass; }  \
 HandlerClass* g_handler_of_##HandlerClass = new HandlerClass;
