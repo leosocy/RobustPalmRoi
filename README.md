@@ -35,6 +35,11 @@ There are ***some requirements*** if you want to install `RobustPalmRoi` library
 - OS Linux/Unix like.
 - [`OpenCV`](https://docs.opencv.org/3.4/d7/d9f/tutorial_linux_install.html) installed.
 - [`yaml-cpp`](https://github.com/jbeder/yaml-cpp) installed.
+    You should install it as a shared library. Step
+    1. `git clone https://github.com/jbeder/yaml-cpp.git`
+    1. `cd yaml-cpp && mkdir -p build && cd build`
+    1. `cmake -DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF -DYAML_CPP_BUILD_CONTRIB=OFF ..`
+    1. `sudo make install`
 
 *Steps:*
 

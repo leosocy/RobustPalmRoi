@@ -5,11 +5,11 @@ HandlerChain:
         scaling:
           value: 0.1
           default: 1.0
-          description: 原图缩放比例(0.0. 1.0]，可以加快chain处理速度。
+          description: Scaling of the original image (0.0.1.0) can speed up the chain process.
         width:
           value: 512
           default: 350
-          description: 按固定宽度等比例缩放，如果同时设置了scaling，则以此参数为准
+          description: Scale to a fixed width, if scaling is set at the same time, the parameter shall prevail.
     - type: LaplaceEnhancer
     - type: GaussianFilter
     - type: OtsuBinarizer
@@ -20,11 +20,11 @@ HandlerChain:
         step:
           value: 8
           default: 5
-          description: 遍历手掌轮廓的步进。过小会导致陷入局部极值，找不到指尖谷底；过大会导致找到的指尖谷底不准确。建议在5~10之间
+          description: Step through the contours of the palm. Too small will lead to the local extreme, can not find the fingertip bottom; Too much leads to inaccurate fingertip troughs. The recommendation is between 5 and 10.
     - type: EffectiveIncircleExtractor
     - type: IncircleRoiNormalizer
       parameters:
         width:
-          value: 256
+          value: 200
           default: 256
-          description: ROI尺寸统一。设为0表示不缩放。
+          description: Uniform ROI size. Set 0 to indicate no scaling.
