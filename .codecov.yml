@@ -27,7 +27,6 @@ coverage:
           - "src/"
   ignore:
     - "thirdparty"
-    - "**/b64.*"
 
 flags:
   app:

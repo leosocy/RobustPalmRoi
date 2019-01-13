@@ -58,4 +58,4 @@ Ready to contribute? Here's how to set up `RobustPalmRoi` for local development.
 Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests and reach the codecov requirement(see in [.codecov.yml](https://github.com/Leosocy/RobustPalmRoi/blob/master/.codecov.yml)).
-1. Please follow `Clean Code` standards, and it would be nicer to follow the [Google C++ Code Style](https://leosocy.top/Google%20C++%20Code%20Style/).
+1. Please follow `Clean Code` standards, and it would be nicer to follow the [Google C++ Code Style](https://blog.leosocy.top/Google%20C++%20Code%20Style/).
