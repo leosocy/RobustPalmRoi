@@ -3,14 +3,11 @@
 CurDir="$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 ######## envs ########
-
 DOCKER_REGISTRY=registry.cn-hangzhou.aliyuncs.com/leosocy
-IMAGE=${DOCKER_REGISTRY}/RobustPalmRoi
-BASE_IMAGE_TAG=${IMAGE}:base-${TRAVIS_COMMIT:0:8}
-PYTHON_IMAGE_TAG=${IMAGE}:python-${TRAVIS_COMMIT:0:8}
+
+# docker images used in ci
 OPENCV_CI_IMAGE=${DOCKER_REGISTRY}/opencv:ci
 CPPCHECK_CI_IMAGE=${DOCKER_REGISTRY}/cppcheck:1.83
-
 CACHED_IMAGES=(${OPENCV_CI_IMAGE} ${CPPCHECK_CI_IMAGE})
 
 APP_TEST_NAME=test-robust-palm-roi
@@ -137,6 +134,7 @@ load_images() {
         ls ${HOME}/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load";
     fi
 }
+
 
 ######## script start ########
 
