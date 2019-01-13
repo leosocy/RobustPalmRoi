@@ -9,7 +9,7 @@ cache:
   - $HOME/docker
 env:
   global:
-  - PROJECT_NAME=RobustPalmRoi
+  - PROJECT_NAME=robustpalmroi
   - DOCKER_REGISTRY=leosocy
   - IMAGE=${DOCKER_REGISTRY}/${PROJECT_NAME}
   - IMAGE_TAG=${IMAGE}:${TRAVIS_TAG}
